@@ -1,0 +1,37 @@
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "util",
+    srcs = [
+        "string_builder.cc",
+    ],
+    hdrs = [
+        "aligned_storage.h",
+        "compare.h",
+        "launder.h",
+        "macros.h",
+        "string_builder.h",
+        "visibility.h",
+    ],
+    defines = ["ARROW_STATIC"],
+    include_prefix = "arrow/util",
+)
+
+cc_library(
+    name = "logging",
+    srcs = ["logging.cc"],
+    hdrs = ["logging.h"],
+    include_prefix = "arrow/util",
+    deps = ["util"],
+)
+
+cc_test(
+    name = "logging_test",
+    srcs = ["logging_test.cc"],
+    deps = [
+        "logging",
+        "@googletest//:gtest",
+    ],
+)
