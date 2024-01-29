@@ -1,3 +1,6 @@
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+#load("@aspect_bazel_lib//lib:expand_make_vars.bzl", "expand_template")
+
 # Root arrow C++ package
 
 # Following CMakeLists.txt
@@ -14,6 +17,64 @@
 
 package(
     default_visibility = ["//visibility:public"],
+)
+
+# Not complete rough patch from CMakeLists.txt
+ARROW_VERSION_MINOR = 16
+ARROW_VERSION_MAJOR = 0
+ARROW_VERSION_PATCH = 0
+ARROW_VERSION = "%d.%d.%d-bazel" % (ARROW_VERSION_MAJOR, ARROW_VERSION_MINOR, ARROW_VERSION_PATCH)
+ARROW_SO_VERSION = "%d" % (ARROW_VERSION_MAJOR * 100 + ARROW_VERSION_MINOR)
+ARROW_FULL_SO_VERSION = "%s.%d.%d" % (ARROW_SO_VERSION, ARROW_VERSION_PATCH, 0)
+ARROW_PACKAGE_KIND = "bazel" # From git-grepping, some of the other choices are: conan, vcpkg, python-wheel-macos, python-wheel-windows
+CMAKE_CXX_COMPILER_ID = "todo_cmake_cxx_compiler_id"
+CMAKE_CXX_COMPILER_VERSION = "todo_cmake_cxx_compiler_version"
+CMAKE_CXX_FLAGS = "todo_cmake_cxx_flags"
+UPPERCASE_BUILD_TYPE = "DEBUG" # "RELEASE" ?
+
+expand_template(
+    name = "util_config_h",
+    out = "util/config.h",
+    template = "util/config.h.cmake",
+    substitutions = {
+        "@ARROW_VERSION_MAJOR@": "%d" % ARROW_VERSION_MAJOR,
+        "@ARROW_VERSION_MINOR@": "%d" % ARROW_VERSION_MINOR,
+        "@ARROW_VERSION_PATCH@": "%d" % ARROW_VERSION_PATCH,
+        "@ARROW_VERSION@": ARROW_VERSION,
+        "@ARROW_SO_VERSION@": ARROW_SO_VERSION,
+        "@ARROW_FULL_SO_VERSION@": ARROW_FULL_SO_VERSION,
+        "@ARROW_GIT_DESCRIPTION@": "todo-git-description",
+        "@ARROW_GIT_ID@": "todo-git-id",
+        "@ARROW_PACKAGE_KIND@": ARROW_PACKAGE_KIND,
+        "@CMAKE_CXX_COMPILER_ID@": CMAKE_CXX_COMPILER_ID,
+        "@CMAKE_CXX_COMPILER_VERSION@": CMAKE_CXX_COMPILER_VERSION,
+        "@CMAKE_CXX_FLAGS@": CMAKE_CXX_FLAGS,
+        "@UPPERCASE_BUILD_TYPE@": UPPERCASE_BUILD_TYPE,
+        # Example how to find uses in the code
+        # git grep -E ".*#.*\bARROW_CSV\b"
+        "#cmakedefine ARROW_COMPUTE": "", # "#define ARROW_COMPUTE",
+        "#cmakedefine ARROW_CSV": "", # "#define ARROW_CSV",
+        "#cmakedefine ARROW_CUDA": "", # "#define ARROW_CUDA",
+        "#cmakedefine ARROW_DATASET": "", # "define ARROW_DATASET",
+        "#cmakedefine ARROW_FILESYSTEM": "", # "define ARROW_FILESYSTEM 0",
+        "#cmakedefine ARROW_FLIGHT_SQL": "", # "define ARROW_FLIGHT_SQL 0",
+        "#cmakedefine ARROW_FLIGHT": "", # "define ARROW_FLIGHT 0",
+        "#cmakedefine ARROW_IPC": "", # "define ARROW_IPC",
+        "#cmakedefine ARROW_JEMALLOC_VENDORED": "", # "define ARROW_JEMALLOC_VENDORED",
+        "#cmakedefine ARROW_JEMALLOC": "", # "define ARROW_JEMALLOC",
+        "#cmakedefine ARROW_JSON": "", # "define ARROW_JSON",
+        "#cmakedefine ARROW_ORC": "", # "define ARROW_ORC",
+        "#cmakedefine ARROW_PARQUET": "", # "define ARROW_PARQUET",
+        "#cmakedefine ARROW_SUBSTRAIT": "", # "define ARROW_SUBSTRAIT",
+        "#cmakedefine ARROW_ENABLE_THREADING": "", # "define ARROW_ENABLE_THREADING",
+        "#cmakedefine ARROW_GCS": "", # "define ARROW_GCS",
+        "#cmakedefine ARROW_S3": "", # "define ARROW_S3",
+        "#cmakedefine ARROW_USE_NATIVE_INT128": "", # "define ARROW_USE_NATIVE_INT128",
+        "#cmakedefine ARROW_WITH_MUSL": "", # "define ARROW_WITH_MUSL",
+        "#cmakedefine ARROW_WITH_OPENTELEMETRY": "", # "define ARROW_WITH_OPENTELEMETRY",
+        "#cmakedefine ARROW_WITH_UCX": "", # "define ARROW_WITH_UCX",
+        "#cmakedefine PARQUET_REQUIRE_ENCRYPTION": "", # "define PARQUET_REQUIRE_ENCRYPTION",
+    }
 )
 
 # From CMakeLists.txt
@@ -352,7 +413,7 @@ ARROW_HDRS = [
 
 cc_library(
     name = "a",
-    defines = ["ARROW_STATIC"],
+    defines = ["ARROW_STATIC=1"],
     copts = ["-std:c++17"],
     srcs = ARROW_SRCS,
     hdrs = ARROW_HDRS,
