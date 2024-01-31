@@ -191,7 +191,6 @@ ARROW_SRCS = [
     "util/uri.cc",
     "util/utf8.cc",
     "util/value_parsing.cc",
-    "vendored/base64.cpp",
     "visitor.cc",
     #    "io/hdfs_internal.cc",
     #    "io/hdfs.cc",
@@ -290,7 +289,6 @@ ARROW_HDRS = [
     "util/async_generator.h",
     "util/async_util.h",
     "util/atfork_internal.h",
-    "util/base64.h",
     "util/basic_decimal.h",
     "util/binary_view_util.h",
     "util/bit_block_counter.h",
@@ -369,13 +367,8 @@ ARROW_HDRS = [
     "util/utf8.h",
     "util/value_parsing.h",
     "util/vector.h",
-    "util/visibility.h",
     "util/windows_compatibility.h",
     "util/windows_fixup.h",
-    "vendored/ProducerConsumerQueue.h",
-    "vendored/strptime.h",
-    "vendored/datetime.h",
-    "vendored/xxhash.h",
     "visit_array_inline.h",
     "visit_data_inline.h",
     "visit_scalar_inline.h",
@@ -395,19 +388,36 @@ cc_library(
 )
 
 cc_library(
+    name = "visibility",
+    hdrs = ["util/visibility.h"],
+    include_prefix = "arrow",
+    deps = ["config"],
+)
+
+cc_library(
+    name = "base64",
+    hdrs = ["util/base64.h"],
+    include_prefix = "arrow",
+    deps = ["visibility"],
+)
+
+cc_library(
     name = "arrow",
     srcs = ARROW_SRCS,
     hdrs = ARROW_HDRS,
     include_prefix = "arrow",
     deps = [
-        "config",
-        "//cpp/src/arrow/vendored/datetime",
+        "visibility",
+        "//cpp/src/arrow/vendored:base64",
+        "//cpp/src/arrow/vendored:datetime",
+        "//cpp/src/arrow/vendored:pcq",
+        "//cpp/src/arrow/vendored:strptime",
+        "//cpp/src/arrow/vendored:xxhash",
         "//cpp/src/arrow/vendored/double-conversion",
         "//cpp/src/arrow/vendored/fast_float",
         "//cpp/src/arrow/vendored/portable-snippets",
         "//cpp/src/arrow/vendored/uriparser",
         "//cpp/src/arrow/vendored/utfcpp",
-        "//cpp/src/arrow/vendored/xxhash",
     ],
 )
 
