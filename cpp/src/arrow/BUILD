@@ -69,7 +69,7 @@ expand_template(
         "#cmakedefine ARROW_ENABLE_THREADING": "", # "define ARROW_ENABLE_THREADING",
         "#cmakedefine ARROW_GCS": "", # "define ARROW_GCS",
         "#cmakedefine ARROW_S3": "", # "define ARROW_S3",
-        "#cmakedefine ARROW_USE_NATIVE_INT128": "", # "define ARROW_USE_NATIVE_INT128",
+        "#cmakedefine ARROW_USE_NATIVE_INT128": "#define ARROW_USE_NATIVE_INT128",
         "#cmakedefine ARROW_WITH_MUSL": "", # "define ARROW_WITH_MUSL",
         "#cmakedefine ARROW_WITH_OPENTELEMETRY": "", # "define ARROW_WITH_OPENTELEMETRY",
         "#cmakedefine ARROW_WITH_UCX": "", # "define ARROW_WITH_UCX",
@@ -132,7 +132,7 @@ ARROW_SRCS = [
     "io/compressed.cc",
     "io/file.cc",
 #    "io/hdfs.cc",
-    "io/hdfs_internal.cc",
+#    "io/hdfs_internal.cc",
     "io/interfaces.cc",
     "io/memory.cc",
     "io/slow.cc",
@@ -264,7 +264,7 @@ ARROW_HDRS = [
     "util/utf8_internal.h",
     "c/abi.h",
     "io/concurrency.h",
-    "filesystem/hdfs.h",
+#    "filesystem/hdfs.h",
     "util/type_fwd.h",
     "util/bitmap_reader.h",
     "vendored/datetime/date.h",
@@ -293,8 +293,8 @@ ARROW_HDRS = [
     "io/caching.h",
     "io/compressed.h",
     "io/file.h",
-    "io/hdfs.h",
-    "io/hdfs_internal.h",
+#    "io/hdfs.h",
+#    "io/hdfs_internal.h",
     "io/interfaces.h",
     "io/memory.h",
     "io/slow.h",
@@ -384,7 +384,7 @@ ARROW_HDRS = [
     "vendored/ProducerConsumerQueue.h",
     "compute/api_aggregate.h",
     "c/util_internal.h",
-    "vendored/utfcpp/checked.h",
+#    "vendored/utfcpp/checked.h",
     "compute/function_options.h",
     "compute/kernel.h",
     "compute/type_fwd.h",
@@ -404,50 +404,38 @@ ARROW_HDRS = [
     "compute/cast.h",
     "util/hash_util.h",
     "util/dispatch.h",
-    "vendored/uriparser/uri.h",
-    "vendored/fast_float/fast_float.h",
     "util/queue.h",
 #    "builder.h",
 
 ]
 
 cc_library(
+    name = "config",
+    defines = ["ARROW_STATIC=1"],
+)
+
+cc_library(
     name = "a",
     defines = ["ARROW_STATIC=1"],
-    copts = ["-std:c++17"],
+    # C++ 20 for <ranges> which in MSVC include <__msvc_int128.h> giving _Signed128 and _Unsigned128 (based on _Base128)
+    copts = ["-std:c++latest"],
     srcs = ARROW_SRCS,
     hdrs = ARROW_HDRS,
     include_prefix = "arrow",
-)
-
-cc_library(
-    name = "compare",
-    srcs = ["compare.cc"],
-)
-
-# Strike for ergonomics
-cc_library(
-    name = "status",
-    srcs = ["status.cc"],
-    hdrs = ["status.h"],
-    include_prefix = "arrow",
-    deps = ["//cpp/src/arrow/util:logging"],
-)
-
-cc_library(
-    name = "status_test",
-    srcs = ["status_test.cc"],
     deps = [
-        "status",
-        "@googletest//:gtest",
+        "config",
+        "//cpp/src/arrow/vendored/fast_float:fast_float",
+        "//cpp/src/arrow/vendored/utfcpp:utfcpp",
+        "//cpp/src/arrow/vendored/uriparser:uriparser",
+#        "//cpp/src/arrow/vendored/uriparser:hacks",
     ],
 )
 
-cc_library(
-    name = "result",
-    srcs = ["result.cc"],
-    hdrs = ["result.h"],
-    #strip_include_prefix = "arrow",
-    include_prefix = "arrow",
-    deps = [":status"],
+cc_test(
+    name = "status_test",
+    srcs = ["status_test.cc"],
+    deps = [
+        "a",
+        "@googletest//:gtest",
+    ],
 )
