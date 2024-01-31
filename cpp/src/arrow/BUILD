@@ -21,21 +21,30 @@ package(
 
 # Not complete rough patch from CMakeLists.txt
 ARROW_VERSION_MINOR = 16
+
 ARROW_VERSION_MAJOR = 0
+
 ARROW_VERSION_PATCH = 0
+
 ARROW_VERSION = "%d.%d.%d-bazel" % (ARROW_VERSION_MAJOR, ARROW_VERSION_MINOR, ARROW_VERSION_PATCH)
+
 ARROW_SO_VERSION = "%d" % (ARROW_VERSION_MAJOR * 100 + ARROW_VERSION_MINOR)
+
 ARROW_FULL_SO_VERSION = "%s.%d.%d" % (ARROW_SO_VERSION, ARROW_VERSION_PATCH, 0)
-ARROW_PACKAGE_KIND = "bazel" # From git-grepping, some of the other choices are: conan, vcpkg, python-wheel-macos, python-wheel-windows
+
+ARROW_PACKAGE_KIND = "bazel"  # From git-grepping, some of the other choices are: conan, vcpkg, python-wheel-macos, python-wheel-windows
+
 CMAKE_CXX_COMPILER_ID = "todo_cmake_cxx_compiler_id"
+
 CMAKE_CXX_COMPILER_VERSION = "todo_cmake_cxx_compiler_version"
+
 CMAKE_CXX_FLAGS = "todo_cmake_cxx_flags"
-UPPERCASE_BUILD_TYPE = "DEBUG" # "RELEASE" ?
+
+UPPERCASE_BUILD_TYPE = "DEBUG"  # "RELEASE" ?
 
 expand_template(
     name = "util_config_h",
     out = "util/config.h",
-    template = "util/config.h.cmake",
     substitutions = {
         "@ARROW_VERSION_MAJOR@": "%d" % ARROW_VERSION_MAJOR,
         "@ARROW_VERSION_MINOR@": "%d" % ARROW_VERSION_MINOR,
@@ -52,29 +61,30 @@ expand_template(
         "@UPPERCASE_BUILD_TYPE@": UPPERCASE_BUILD_TYPE,
         # Example how to find uses in the code
         # git grep -E ".*#.*\bARROW_CSV\b"
-        "#cmakedefine ARROW_COMPUTE": "", # "#define ARROW_COMPUTE",
-        "#cmakedefine ARROW_CSV": "", # "#define ARROW_CSV",
-        "#cmakedefine ARROW_CUDA": "", # "#define ARROW_CUDA",
-        "#cmakedefine ARROW_DATASET": "", # "define ARROW_DATASET",
-        "#cmakedefine ARROW_FILESYSTEM": "", # "define ARROW_FILESYSTEM 0",
-        "#cmakedefine ARROW_FLIGHT_SQL": "", # "define ARROW_FLIGHT_SQL 0",
-        "#cmakedefine ARROW_FLIGHT": "", # "define ARROW_FLIGHT 0",
-        "#cmakedefine ARROW_IPC": "", # "define ARROW_IPC",
-        "#cmakedefine ARROW_JEMALLOC_VENDORED": "", # "define ARROW_JEMALLOC_VENDORED",
-        "#cmakedefine ARROW_JEMALLOC": "", # "define ARROW_JEMALLOC",
-        "#cmakedefine ARROW_JSON": "", # "define ARROW_JSON",
-        "#cmakedefine ARROW_ORC": "", # "define ARROW_ORC",
-        "#cmakedefine ARROW_PARQUET": "", # "define ARROW_PARQUET",
-        "#cmakedefine ARROW_SUBSTRAIT": "", # "define ARROW_SUBSTRAIT",
-        "#cmakedefine ARROW_ENABLE_THREADING": "", # "define ARROW_ENABLE_THREADING",
-        "#cmakedefine ARROW_GCS": "", # "define ARROW_GCS",
-        "#cmakedefine ARROW_S3": "", # "define ARROW_S3",
+        "#cmakedefine ARROW_COMPUTE": "",  # "#define ARROW_COMPUTE",
+        "#cmakedefine ARROW_CSV": "",  # "#define ARROW_CSV",
+        "#cmakedefine ARROW_CUDA": "",  # "#define ARROW_CUDA",
+        "#cmakedefine ARROW_DATASET": "",  # "define ARROW_DATASET",
+        "#cmakedefine ARROW_FILESYSTEM": "",  # "define ARROW_FILESYSTEM 0",
+        "#cmakedefine ARROW_FLIGHT_SQL": "",  # "define ARROW_FLIGHT_SQL 0",
+        "#cmakedefine ARROW_FLIGHT": "",  # "define ARROW_FLIGHT 0",
+        "#cmakedefine ARROW_IPC": "",  # "define ARROW_IPC",
+        "#cmakedefine ARROW_JEMALLOC_VENDORED": "",  # "define ARROW_JEMALLOC_VENDORED",
+        "#cmakedefine ARROW_JEMALLOC": "",  # "define ARROW_JEMALLOC",
+        "#cmakedefine ARROW_JSON": "",  # "define ARROW_JSON",
+        "#cmakedefine ARROW_ORC": "",  # "define ARROW_ORC",
+        "#cmakedefine ARROW_PARQUET": "",  # "define ARROW_PARQUET",
+        "#cmakedefine ARROW_SUBSTRAIT": "",  # "define ARROW_SUBSTRAIT",
+        "#cmakedefine ARROW_ENABLE_THREADING": "",  # "define ARROW_ENABLE_THREADING",
+        "#cmakedefine ARROW_GCS": "",  # "define ARROW_GCS",
+        "#cmakedefine ARROW_S3": "",  # "define ARROW_S3",
         "#cmakedefine ARROW_USE_NATIVE_INT128": "#define ARROW_USE_NATIVE_INT128",
-        "#cmakedefine ARROW_WITH_MUSL": "", # "define ARROW_WITH_MUSL",
-        "#cmakedefine ARROW_WITH_OPENTELEMETRY": "", # "define ARROW_WITH_OPENTELEMETRY",
-        "#cmakedefine ARROW_WITH_UCX": "", # "define ARROW_WITH_UCX",
-        "#cmakedefine PARQUET_REQUIRE_ENCRYPTION": "", # "define PARQUET_REQUIRE_ENCRYPTION",
-    }
+        "#cmakedefine ARROW_WITH_MUSL": "",  # "define ARROW_WITH_MUSL",
+        "#cmakedefine ARROW_WITH_OPENTELEMETRY": "",  # "define ARROW_WITH_OPENTELEMETRY",
+        "#cmakedefine ARROW_WITH_UCX": "",  # "define ARROW_WITH_UCX",
+        "#cmakedefine PARQUET_REQUIRE_ENCRYPTION": "",  # "define PARQUET_REQUIRE_ENCRYPTION",
+    },
+    template = "util/config.h.cmake",
 )
 
 # From CMakeLists.txt
@@ -182,18 +192,9 @@ ARROW_SRCS = [
     "util/utf8.cc",
     "util/value_parsing.cc",
     "vendored/base64.cpp",
-    "vendored/datetime/tz.cpp",
-    "vendored/double-conversion/bignum-dtoa.cc",
-    "vendored/double-conversion/bignum.cc",
-    "vendored/double-conversion/cached-powers.cc",
-    "vendored/double-conversion/double-to-string.cc",
-    "vendored/double-conversion/fast-dtoa.cc",
-    "vendored/double-conversion/fixed-dtoa.cc",
-    "vendored/double-conversion/string-to-double.cc",
-    "vendored/double-conversion/strtod.cc",
     "visitor.cc",
-#    "io/hdfs_internal.cc",
-#    "io/hdfs.cc",
+    #    "io/hdfs_internal.cc",
+    #    "io/hdfs.cc",
 ]
 
 ARROW_HDRS = [
@@ -371,41 +372,21 @@ ARROW_HDRS = [
     "util/visibility.h",
     "util/windows_compatibility.h",
     "util/windows_fixup.h",
-    "vendored/datetime.h",
-    "vendored/datetime/date.h",
-    "vendored/datetime/tz_private.h",
-    "vendored/datetime/tz.h",
-    "vendored/datetime/visibility.h",
-    "vendored/double-conversion/bignum-dtoa.h",
-    "vendored/double-conversion/bignum.h",
-    "vendored/double-conversion/cached-powers.h",
-    "vendored/double-conversion/diy-fp.h",
-    "vendored/double-conversion/double-conversion.h",
-    "vendored/double-conversion/double-to-string.h",
-    "vendored/double-conversion/fast-dtoa.h",
-    "vendored/double-conversion/fixed-dtoa.h",
-    "vendored/double-conversion/ieee.h",
-    "vendored/double-conversion/string-to-double.h",
-    "vendored/double-conversion/strtod.h",
-    "vendored/double-conversion/utils.h",
-    "vendored/portable-snippets/debug-trap.h",
-    "vendored/portable-snippets/safe-math.h",
     "vendored/ProducerConsumerQueue.h",
     "vendored/strptime.h",
+    "vendored/datetime.h",
     "vendored/xxhash.h",
-    "vendored/xxhash/xxhash.h",
     "visit_array_inline.h",
     "visit_data_inline.h",
     "visit_scalar_inline.h",
     "visit_type_inline.h",
     "visitor_generate.h",
     "visitor.h",
-#    "filesystem/hdfs.h",
-#    "io/hdfs_internal.h",
-#    "io/hdfs.h",
-#    "parse_number.h",
-#    "vendored/utfcpp/checked.h",
-#    "builder.h",
+    #    "filesystem/hdfs.h",
+    #    "io/hdfs_internal.h",
+    #    "io/hdfs.h",
+    #    "parse_number.h",
+    #    "builder.h",
 ]
 
 cc_library(
@@ -415,17 +396,18 @@ cc_library(
 
 cc_library(
     name = "arrow",
-    # C++ 20 for <ranges> which in MSVC include <__msvc_int128.h> giving _Signed128 and _Unsigned128 (based on _Base128)
-    copts = ["-std:c++latest"],
     srcs = ARROW_SRCS,
     hdrs = ARROW_HDRS,
     include_prefix = "arrow",
     deps = [
         "config",
-        "//cpp/src/arrow/vendored/fast_float:fast_float",
-        "//cpp/src/arrow/vendored/utfcpp:utfcpp",
-        "//cpp/src/arrow/vendored/uriparser:uriparser",
-#        "//cpp/src/arrow/vendored/uriparser:hacks",
+        "//cpp/src/arrow/vendored/datetime",
+        "//cpp/src/arrow/vendored/double-conversion",
+        "//cpp/src/arrow/vendored/fast_float",
+        "//cpp/src/arrow/vendored/portable-snippets",
+        "//cpp/src/arrow/vendored/uriparser",
+        "//cpp/src/arrow/vendored/utfcpp",
+        "//cpp/src/arrow/vendored/xxhash",
     ],
 )
 
@@ -433,7 +415,7 @@ cc_test(
     name = "status_test",
     srcs = ["status_test.cc"],
     deps = [
-        "a",
+        "arrow",
         "@googletest//:gtest",
     ],
 )
