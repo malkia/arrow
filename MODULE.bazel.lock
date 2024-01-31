@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "04765a8a5e1081bb5b60da54b3103e52fa0ad6f57d2698fbeb4266d152370dfa",
+  "moduleFileHash": "9d9f4f9826fab5638328aead8d12a09290f85aa08be5a7a89b9579a342f6ac83",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -1260,6 +1260,25 @@
             "bazel_tools"
           ]
         ]
+      }
+    },
+    "@@bazel_tools//tools/osx:xcode_configure.bzl%xcode_configure_extension": {
+      "general": {
+        "bzlTransitiveDigest": "Qh2bWTU6QW6wkrd87qrU4YeY+SG37Nvw3A0PR4Y0L2Y=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "local_config_xcode": {
+            "bzlFile": "@@bazel_tools//tools/osx:xcode_configure.bzl",
+            "ruleClassName": "xcode_autoconf",
+            "attributes": {
+              "name": "bazel_tools~xcode_configure_extension~local_config_xcode",
+              "xcode_locator": "@bazel_tools//tools/osx:xcode_locator.m",
+              "remote_xcode": ""
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@bazel_tools//tools/sh:sh_configure.bzl%sh_configure_extension": {

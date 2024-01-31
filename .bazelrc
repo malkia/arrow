@@ -1,4 +1,4 @@
-# Don't create the "bazel-*" folders
+                                                                                                # Don't create the "bazel-*" folders
 build --experimental_convenience_symlinks=clean
 
 # Enable ":windows" ":linux", etc. auto-config tags
@@ -7,6 +7,7 @@ common --enable_platform_specific_config
 # msvc, enable c++20 for <ranges> which brings <__msvc_int128> and from there we use _Signed128 and _Unsigned128
 # Otherwise we'll have to use boost for that.
 common:windows --cxxopt=-std:c++20
+common:linux --cxxopt=-std=c++20
 
 # Select the clang-cli, the definion is in the WORKSPACE (x64_windows-clang-cl)
 # common:windows --extra_execution_platforms=//:x64_windows-clang-cl --extra_toolchains=@local_config_cc//:cc-toolchain-x64_windows-clang-cl
