@@ -4,6 +4,7 @@ package(
 
 cc_library(
     name = "uriparser",
+    defines = ["URI_STATIC_BUILD"],
     includes = ["."],
     include_prefix = "arrow/vendored/uriparser",
     hdrs = [
