@@ -10,4 +10,4 @@ bazel-genfiles
 bazel-out
 bazel-testlogs
 bazel-arrow
-
+node_modules

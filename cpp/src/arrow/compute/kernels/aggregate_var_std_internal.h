@@ -48,8 +48,10 @@ struct IntegerVarStd {
     // decompose `sum * sum / count` into integers and fractions
     const int128_t sum_square = static_cast<int128_t>(sum) * sum;
     const int128_t integers = sum_square / count;
-    const double fractions = static_cast<double>(sum_square % count) / count;
-    return static_cast<double>(square_sum - integers) - fractions;
+    const int64_t sum_square_mod_count = static_cast<int64_t>(sum_square % count);
+    const double fractions = static_cast<double>(sum_square_mod_count) / count;
+    const int64_t square_sum_sub_integers = static_cast<int64_t>(square_sum - integers);
+    return static_cast<double>(square_sum_sub_integers) - fractions;
   }
 };
 
