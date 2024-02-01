@@ -27,7 +27,10 @@ cc_library(
     ],
     defines = ["ARROW_TESTING_STATIC=1"],
     include_prefix = "arrow/testing",
-    linkopts = ["ws2_32.lib"],
+    linkopts = select({
+        "@platforms//os:windows": ["ws2_32.lib"],
+        "//conditions:default": [],
+    }),
     deps = [
         "//cpp/src/arrow",
         "@googletest//:gtest",

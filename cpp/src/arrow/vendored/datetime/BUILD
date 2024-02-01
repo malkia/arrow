@@ -22,5 +22,8 @@ cc_library(
     deps = [
         "//cpp/src/arrow:config",
     ],
-    linkopts = ["ole32.lib", "shell32.lib"],
+    linkopts = select({
+        "@platforms//os:windows": ["ole32.lib", "shell32.lib"],
+        "//conditions:default": [],
+    }),
 )
