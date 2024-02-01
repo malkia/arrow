@@ -28,7 +28,9 @@
 #include <vector>
 
 #include <gtest/gtest.h>
+#ifndef _MSC_VER
 #include <boost/multiprecision/cpp_int.hpp>
+#endif
 
 #include "arrow/array.h"
 #include "arrow/scalar.h"
@@ -1865,6 +1867,7 @@ Decimal256 Decimal256FromInt128(int128_t value) {
                                static_cast<uint64_t>(value & 0xFFFFFFFFFFFFFFFFULL)));
 }
 
+#ifndef _MSC_VER
 TEST(Decimal256Test, Multiply) {
   using boost::multiprecision::int256_t;
   using boost::multiprecision::uint256_t;
@@ -1920,6 +1923,7 @@ TEST(Decimal256Test, Multiply) {
     }
   }
 }
+#endif
 
 TEST(Decimal256Test, LeftShift) {
   {

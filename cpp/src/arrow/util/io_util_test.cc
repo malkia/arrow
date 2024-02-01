@@ -175,7 +175,11 @@ class TestFileDescriptor : public ::testing::Test {
  public:
   Result<int> NewFileDescriptor() {
     // Make a new fd by dup'ing C stdout (why not?)
+  #ifdef _MSC_VER
+    int new_fd = _dup(1);
+#else
     int new_fd = dup(1);
+#endif
     if (new_fd < 0) {
       return IOErrorFromErrno(errno, "Failed to dup() C stdout");
     }

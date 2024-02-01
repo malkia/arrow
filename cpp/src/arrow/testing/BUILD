@@ -28,7 +28,7 @@ cc_library(
     defines = ["ARROW_TESTING_STATIC=1"],
     include_prefix = "arrow/testing",
     linkopts = select({
-        "@platforms//os:windows": ["ws2_32.lib"],
+        "@platforms//os:windows": ["ws2_32.lib", "advapi32.lib"],
         "//conditions:default": [],
     }),
     deps = [
@@ -37,20 +37,12 @@ cc_library(
     ],
 )
 
-cc_test(
-    name = "gtest_util_test",
-    srcs = ["gtest_util_test.cc"],
+[cc_test(
+    name = n,
+    srcs = [n + ".cc"],
     deps = [
         "testing",
         "@googletest//:gtest_main",
     ],
 )
-
-cc_test(
-    name = "random_test",
-    srcs = ["random_test.cc"],
-    deps = [
-        "testing",
-        "@googletest//:gtest_main",
-    ],
-)
+for n in ["gtest_util_test", "random_test"]]
