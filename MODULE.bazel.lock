@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "422febe063753fbd2c9fb242a1daed428816379b2676a1247abf0caf182a72c9",
+  "moduleFileHash": "c0190daefd99a36f7cdeb5dda3f5772e4c9f19fc0f2787f4b89cbf0d7f661c40",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -2913,8 +2913,8 @@
       "general": {
         "bzlTransitiveDigest": "yFtW6+kXNQSVSNgaLoEmHqirfeL0KVZ2F1CPkixcOEw=",
         "accumulatedFileDigests": {
-          "@@aspect_bazel_lib~2.3.0~toolchains~yq_linux_amd64//:yq": "042f7462ec8378f8b0d3bac85d1b1a063b63beef5d8e3826bb2377294116ae90",
-          "@@//:pnpm-lock.yaml": "1bc8523529670e9440e5f70639c1801ccad3490e9f0924127d420ab02b176d25"
+          "@@aspect_bazel_lib~2.3.0~toolchains~yq_windows_amd64//:yq.exe": "7d391921bf5481db063e2b0f043aab0ef2ddaa854ae0e03a4d6d9a1112d18fa8",
+          "@@//:pnpm-lock.yaml": "3416d9bf49e49fde108cffa7f410c3c4f41529962d87c6bfd977c2feadea2a79"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3000,8 +3000,8 @@
           ],
           [
             "aspect_rules_js~1.37.1",
-            "yq_linux_amd64",
-            "aspect_bazel_lib~2.3.0~toolchains~yq_linux_amd64"
+            "yq_windows_amd64",
+            "aspect_bazel_lib~2.3.0~toolchains~yq_windows_amd64"
           ]
         ]
       }
