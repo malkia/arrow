@@ -4,6 +4,7 @@ package(
 
 cc_library(
     name = "testing",
+    testonly = 1,
     srcs = [
         "generator.cc",
         "gtest_util.cc",

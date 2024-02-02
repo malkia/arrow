@@ -2,7 +2,6 @@ load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 # load("@rules_cc//cc:defs.bzl", "windows_resources")
 
-
 #load("@aspect_bazel_lib//lib:expand_make_vars.bzl", "expand_template")
 
 # Root arrow C++ package
@@ -46,12 +45,10 @@ CMAKE_CXX_FLAGS = "todo_cmake_cxx_flags"
 
 UPPERCASE_BUILD_TYPE = "DEBUG"  # "RELEASE" ?
 
-
 # windows_resources(
 #     name = "longpaths",
 #     rc_files = ["util/io_util_test.rc"],
 # )
-
 
 expand_template(
     name = "util_config_h",
@@ -306,11 +303,11 @@ ARROW_SRCS = [
     #    "compute/util_avx2.cc",
     #    "io/hdfs_internal.cc",
     #    "io/hdfs.cc",
-    # filesystem\azurefs.cc
-    # filesystem\gcsfs_internal.cc
-    # filesystem\gcsfs.cc
-    # filesystem\hdfs.cc
-    # filesystem\s3fs.cc
+    # filesystem/azurefs.cc
+    # filesystem/gcsfs_internal.cc
+    # filesystem/gcsfs.cc
+    # filesystem/hdfs.cc
+    # filesystem/s3fs.cc
 ]
 
 ARROW_HDRS = [
@@ -503,6 +500,7 @@ ARROW_HDRS = [
     "util/bitmap_ops.h",
     "util/bitmap_reader.h",
     "util/bitmap_writer.h",
+    "util/map.h",
     "util/bitmap.h",
     "util/bitset_stack.h",
     "util/bpacking_default.h",
@@ -587,13 +585,13 @@ ARROW_HDRS = [
     #filesystem/hdfs.h
     #io/hdfs_internal.h
     #io/hdfs.h
-    #filesystem\azurefs_internal.h
-    #filesystem\azurefs.h
-    #filesystem\gcsfs_internal.h
-    #filesystem\gcsfs.h
-    #filesystem\hdfs.h
-    #filesystem\s3_internal.h
-    #filesystem\s3fs.h
+    #filesystem/azurefs_internal.h
+    #filesystem/azurefs.h
+    #filesystem/gcsfs_internal.h
+    #filesystem/gcsfs.h
+    #filesystem/hdfs.h
+    #filesystem/s3_internal.h
+    #filesystem/s3fs.h
 ]
 
 cc_library(
@@ -602,7 +600,7 @@ cc_library(
     # deps = select({
     #     "@platforms//os:windows": ["longpaths"],
     #     "//conditions:default": [],
-    # }),    
+    # }),
 )
 
 cc_library(
@@ -654,11 +652,11 @@ cc_library(
     ],
     hdrs = [
         "compute/kernels/test_util.h",
-        "memory_pool_test.h",
         "csv/test_common.h",
         "io/test_common.h",
         "ipc/test_common.h",
         "json/test_common.h",
+        "memory_pool_test.h",
         "util/test_common.h",
     ],
     include_prefix = "arrow",
@@ -667,8 +665,26 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "filesystem_test_util",
+    testonly = 1,
+    srcs = [
+        "filesystem/test_util.cc",
+    ],
+    hdrs = [
+        "filesystem/test_util.h",
+    ],
+    include_prefix = "arrow",
+    deps = [
+        "//cpp/src/arrow/testing",
+    ],
+)
+
 [cc_test(
-    name = paths.dirname(n) + "_" + paths.replace_extension(paths.basename(n),""),
+    name = paths.dirname(n) + "_" + paths.replace_extension(
+        paths.basename(n),
+        "",
+    ),
     srcs = [n],
     features = [
         "generate_pdb_file",
@@ -773,7 +789,10 @@ cc_library(
 )
 
 [cc_test(
-    name = paths.dirname(n) + "_" + paths.replace_extension(paths.basename(n),""),
+    name = paths.dirname(n) + "_" + paths.replace_extension(
+        paths.basename(n),
+        "",
+    ),
     srcs = [n],
     features = [
         "generate_pdb_file",
