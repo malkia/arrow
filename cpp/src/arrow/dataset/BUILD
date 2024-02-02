@@ -68,23 +68,6 @@ cc_library(
     ],
 )
 
-# cc_library(
-#     name = "benchmark_util",
-#     testonly = 1,
-#     srcs = [
-#         "benchmark_util.cc",
-#     ],
-#     hdrs = [
-#         "benchmark_util.h",
-#     ],
-#     include_prefix = "arrow/acero",
-#     deps = [
-#         "acero",
-#         "test_util",
-#         "@google_benchmark//:benchmark",
-#     ],
-# )
-
 [cc_test(
     name = name,
     srcs = [name + ".cc"],
@@ -113,22 +96,18 @@ cc_library(
     "write_node_test",
 ]]
 
-# [cc_test(
-#     name = name,
-#     srcs = [name + ".cc"],
-#     features = [
-#         "generate_pdb_file",
-#     ],
-#     deps = [
-#         "benchmark_util",
-#         "//cpp/src/arrow:benchmark_common",
-#     ],
-# ) for name in [
-#     "aggregate_benchmark",
-#     "asof_join_benchmark",
-#     "expression_benchmark",
-#     "filter_benchmark",
-#     "hash_join_benchmark",
-#     "project_benchmark",
-#     "tpch_benchmark",
-# ]]
+[cc_test(
+    name = name,
+    srcs = [name + ".cc"],
+    features = [
+        "generate_pdb_file",
+    ],
+    deps = [
+        "dataset",
+        "//cpp/src/arrow:filesystem_test_util",
+        "//cpp/src/arrow:benchmark_common",
+    ],
+) for name in [
+    "file_benchmark",
+    "scanner_benchmark",
+]]
