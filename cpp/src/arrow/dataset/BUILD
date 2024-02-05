@@ -3,13 +3,28 @@ package(
 )
 
 cc_library(
+    name = "csv",
+    srcs = [
+        "file_csv.cc",
+    ],
+    hdrs = [
+        "file_csv.h",
+    ],
+    defines = ["ARROW_DS_STATIC=1"],
+    include_prefix = "arrow/dataset",
+    deps = [
+        "dataset",
+        "//cpp/src/arrow/csv",
+    ],
+)
+
+cc_library(
     name = "dataset",
     srcs = [
         "dataset.cc",
         "dataset_writer.cc",
         "discovery.cc",
         "file_base.cc",
-        "file_csv.cc",
         "file_ipc.cc",
         "file_json.cc",
         #"file_orc.cc",
@@ -27,7 +42,6 @@ cc_library(
         "dataset_writer.h",
         "discovery.h",
         "file_base.h",
-        "file_csv.h",
         "file_ipc.h",
         "file_json.h",
         #"file_orc.h",
@@ -35,7 +49,7 @@ cc_library(
         "forest_internal.h",
         #"parquet_encryption_config.h",
         "partition.h",
-        #        "pch.h",
+        "pch.h",
         "plan.h",
         "projector.h",
         "scanner.h",
@@ -76,6 +90,7 @@ cc_library(
     ],
     deps = [
         "test_util",
+        "csv",
         #"//cpp/src/arrow:test_common",
         "@googletest//:gtest_main",
     ],
