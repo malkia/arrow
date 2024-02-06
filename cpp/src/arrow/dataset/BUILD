@@ -3,7 +3,7 @@ package(
 )
 
 cc_library(
-    name = "csv",
+    name = "file_csv",
     srcs = [
         "file_csv.cc",
     ],
@@ -90,8 +90,9 @@ cc_library(
     ],
     deps = [
         "test_util",
-        "csv",
+        "file_csv",
         #"//cpp/src/arrow:test_common",
+        "//cpp/src/arrow/acero:test_util",
         "@googletest//:gtest_main",
     ],
 ) for name in [

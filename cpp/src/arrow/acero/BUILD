@@ -61,8 +61,6 @@ cc_library(
         "schema_util.h",
         "swiss_join_internal.h",
         "task_util.h",
-        "test_nodes.h",
-        "test_util_internal.h",
         "time_series_util.h",
         "tpch_node.h",
         "type_fwd.h",

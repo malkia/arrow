@@ -156,10 +156,11 @@ class DatasetWriterTestFixture : public testing::Test {
   }
 
   std::shared_ptr<RecordBatch> ReadAsBatch(std::string_view data, int* num_batches) {
-    std::shared_ptr<io::RandomAccessFile> in_stream =
-        std::make_shared<io::BufferReader>(data);
+    // std::shared_ptr<io::RandomAccessFile> in_stream =
+    //     std::make_shared<io::BufferReader>(data);
+    auto in_stream = io::BufferReader::FromString(std::string(data));
     EXPECT_OK_AND_ASSIGN(std::shared_ptr<ipc::RecordBatchFileReader> reader,
-                         ipc::RecordBatchFileReader::Open(in_stream));
+                         ipc::RecordBatchFileReader::Open(std::move(in_stream)));
     RecordBatchVector batches;
     *num_batches = reader->num_record_batches();
     EXPECT_GT(*num_batches, 0);

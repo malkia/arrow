@@ -41,7 +41,17 @@ cc_test(
         "bridge",
         "//cpp/src/arrow/testing",
         "@googletest//:gtest_main",
-    ]
+    ],
+)
+
+cc_test(
+    name = "bridge_benchmark",
+    srcs = ["bridge_benchmark.cc"],
+    deps = [
+        "bridge",
+        "//cpp/src/arrow:benchmark_common",
+        "//cpp/src/arrow/testing",
+    ],
 )
 
 cc_test(
@@ -51,5 +61,5 @@ cc_test(
         "dlpack",
         "//cpp/src/arrow/testing",
         "@googletest//:gtest_main",
-    ]
+    ],
 )
