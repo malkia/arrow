@@ -8,6 +8,7 @@ load(
     "ARROW_VERSION_MINOR",
     "ARROW_VERSION_PATCH",
 )
+load("@bazel_skylib//lib:paths.bzl", "paths")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -36,7 +37,7 @@ cc_library(
     include_prefix = "parquet",
     deps = [
         "//cpp/src/arrow",
-    ]
+    ],
 )
 
 cc_library(
@@ -52,9 +53,9 @@ cc_library(
         "file_reader.cc",
         "file_writer.cc",
         "level_comparison.cc",
-        #        "level_comparison_avx2.cc",
+        "level_comparison_avx2.cc",
         "level_conversion.cc",
-        #        "level_conversion_bmi2.cc",
+        "level_conversion_bmi2.cc",
         "metadata.cc",
         "page_index.cc",
         "platform.cc",
@@ -66,28 +67,25 @@ cc_library(
         "stream_writer.cc",
         "types.cc",
         "xxhasher.cc",
-
-
-"encryption/crypto_factory.cc",
-"encryption/encryption.cc",
-"encryption/encryption_internal.cc",
-"encryption/encryption_internal_nossl.cc",
-"encryption/file_key_unwrapper.cc",
-"encryption/file_key_wrapper.cc",
-"encryption/file_system_key_material_store.cc",
-"encryption/internal_file_decryptor.cc",
-"encryption/internal_file_encryptor.cc",
-"encryption/key_material.cc",
-"encryption/key_metadata.cc",
-"encryption/key_toolkit.cc",
-"encryption/key_toolkit_internal.cc",
-"encryption/kms_client.cc",
-"encryption/local_wrap_kms_client.cc",
-"encryption/openssl_internal.cc",
-
+        "encryption/crypto_factory.cc",
+        "encryption/encryption.cc",
+        "encryption/encryption_internal.cc",
+        #TODO(malkia): In the future if we have no-SSL build would need that.
+        #"encryption/encryption_internal_nossl.cc",
+        "encryption/file_key_unwrapper.cc",
+        "encryption/file_key_wrapper.cc",
+        "encryption/file_system_key_material_store.cc",
+        "encryption/internal_file_decryptor.cc",
+        "encryption/internal_file_encryptor.cc",
+        "encryption/key_material.cc",
+        "encryption/key_metadata.cc",
+        "encryption/key_toolkit.cc",
+        "encryption/key_toolkit_internal.cc",
+        "encryption/kms_client.cc",
+        "encryption/local_wrap_kms_client.cc",
+        "encryption/openssl_internal.cc",
     ],
     hdrs = [
-        "parquet_version.h",
         "bloom_filter.h",
         "bloom_filter_reader.h",
         "column_page.h",
@@ -125,6 +123,7 @@ cc_library(
         "level_conversion_inc.h",
         "metadata.h",
         "page_index.h",
+        "parquet_version.h",
         "pch.h",
         "platform.h",
         "printer.h",
@@ -142,9 +141,9 @@ cc_library(
     defines = ["PARQUET_STATIC=1"],
     include_prefix = "parquet",
     deps = [
+        "windows",
         "//cpp/src/arrow",
         "//cpp/src/generated:parquet_thrift",
-        "windows",
         "@boringssl//:ssl",
     ],
 )
@@ -190,9 +189,18 @@ cc_library(
     features = [
         "generate_pdb_file",
     ],
+    data = [
+        # This declares all data
+        "//cpp/submodules/parquet-testing:data",
+        # This is to get to one file to the "data" folder, and then /.. to it (hack!)
+        "//cpp/submodules/parquet-testing:data/README.md",
+    ],
+    env = {
+        "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules/parquet-testing:data/README.md)/../",
+    },
     deps = [
         "test_util",
-#        "//cpp/src/arrow:test_common",
+        "//cpp/src/parquet/api",
         "@googletest//:gtest_main",
     ],
 ) for name in [
@@ -217,23 +225,21 @@ cc_library(
     "types_test",
 ]]
 
-# [cc_test(
-#     name = name,
-#     srcs = [name + ".cc"],
-#     features = [
-#         "generate_pdb_file",
-#     ],
-#     deps = [
-#         "benchmark_util",
-#         "//cpp/src/arrow:benchmark_common",
-#         "//cpp/src/arrow/dataset",
-#     ],
-# ) for name in [
-#     "aggregate_benchmark",
-#     "asof_join_benchmark",
-#     "expression_benchmark",
-#     "filter_benchmark",
-#     "hash_join_benchmark",
-#     "project_benchmark",
-#     "tpch_benchmark",
-# ]]
+[cc_test(
+    name = name,
+    srcs = [name + ".cc"],
+    features = [
+        "generate_pdb_file",
+    ],
+    deps = [
+        "benchmark_util",
+        "//cpp/src/arrow:benchmark_common",
+    ],
+) for name in [
+    "bloom_filter_benchmark",
+    "column_io_benchmark",
+    "column_reader_benchmark",
+    "encoding_benchmark",
+    "level_conversion_benchmark",
+    "page_index_benchmark",
+]]

@@ -1,4 +1,4 @@
-                                                                                                # Don't create the "bazel-*" folders
+common --enable_runfiles                                                                                            # Don't create the "bazel-*" foldersriu
 build --experimental_convenience_symlinks=clean
 
 # Enable ":windows" ":linux", etc. auto-config tags

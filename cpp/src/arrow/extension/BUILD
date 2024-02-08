@@ -9,6 +9,7 @@ cc_library(
     ],
     hdrs = [
         "fixed_shape_tensor.h",
+        "tensor_internal.h",
     ],
     include_prefix = "arrow/extension",
     deps = [

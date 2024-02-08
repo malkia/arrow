@@ -36,13 +36,21 @@ cc_library(
     ],
 )
 
-
 [cc_test(
     name = name,
     srcs = [name + ".cc"],
     features = [
         "generate_pdb_file",
     ],
+    data = [
+        # This declares all data
+        "//cpp/submodules/parquet-testing:data",
+        # This is to get to one file to the "data" folder, and then /.. to it (hack!)
+        "//cpp/submodules/parquet-testing:data/README.md",
+    ],
+    env = {
+        "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules/parquet-testing:data/README.md)/../",
+    },
     deps = [
         "test_util",
         "//cpp/src/parquet/api",
@@ -50,9 +58,33 @@ cc_library(
         "@googletest//:gtest_main",
     ],
 ) for name in [
-#    "arrow_reader_writer_test", ## Takes a long time to compile (?)
+    "arrow_reader_writer_test",
     "arrow_schema_test",
     "arrow_statistics_test",
     "path_internal_test",
     "reconstruct_internal_test",
+]]
+
+[cc_test(
+    name = name,
+    srcs = [name + ".cc"],
+    features = [
+        "generate_pdb_file",
+    ],
+    # data = [
+    #     # This declares all data
+    #     "//cpp/submodules/parquet-testing:data",
+    #     # This is to get to one file to the "data" folder, and then /.. to it (hack!)
+    #     "//cpp/submodules/parquet-testing:data/README.md",
+    # ],
+    # env = {
+    #     "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules/parquet-testing:data/README.md)/../",
+    # },
+    deps = [
+        "arrow",
+        "//cpp/src/arrow/testing",
+        "//cpp/src/arrow:benchmark_common",
+    ],
+) for name in [
+    "reader_writer_benchmark",
 ]]
