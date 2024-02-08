@@ -13,13 +13,13 @@ cc_library(
     defines = ["ARROW_DS_STATIC=1"],
     include_prefix = "arrow/dataset",
     deps = [
-        "dataset",
+        "internal",
         "//cpp/src/arrow/csv",
     ],
 )
 
 cc_library(
-    name = "dataset",
+    name = "internal",
     srcs = [
         "dataset.cc",
         "dataset_writer.cc",
@@ -28,7 +28,7 @@ cc_library(
         "file_ipc.cc",
         "file_json.cc",
         #"file_orc.cc",
-        #"file_parquet.cc",
+        "file_parquet.cc",
         "partition.cc",
         "plan.cc",
         "projector.cc",
@@ -45,9 +45,9 @@ cc_library(
         "file_ipc.h",
         "file_json.h",
         #"file_orc.h",
-        #"file_parquet.h",
+        "file_parquet.h",
         "forest_internal.h",
-        #"parquet_encryption_config.h",
+        "parquet_encryption_config.h",
         "partition.h",
         "pch.h",
         "plan.h",
@@ -63,6 +63,11 @@ cc_library(
     deps = [
         "//cpp/src/arrow/acero",
     ],
+)
+
+cc_library(
+    name = "dataset",
+    deps = ["internal", "file_csv"],
 )
 
 cc_library(
@@ -90,7 +95,7 @@ cc_library(
     ],
     deps = [
         "test_util",
-        "file_csv",
+        "dataset",
         #"//cpp/src/arrow:test_common",
         "//cpp/src/arrow/acero:test_util",
         "@googletest//:gtest_main",
@@ -103,8 +108,8 @@ cc_library(
     "file_ipc_test",
     "file_json_test",
     #"file_orc_test",
-    #"file_parquet_encryption_test",
-    #"file_parquet_test",
+    "file_parquet_encryption_test",
+    "file_parquet_test",
     "file_test",
     "partition_test",
     "scanner_test",

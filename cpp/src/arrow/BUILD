@@ -1,5 +1,17 @@
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+
+load(
+    "//bazel:version.bzl",
+    "ARROW_FULL_SO_VERSION",
+    "ARROW_SO_VERSION",
+    "ARROW_VERSION",
+    "ARROW_VERSION_MAJOR",
+    "ARROW_VERSION_MINOR",
+    "ARROW_VERSION_PATCH",
+    "ARROW_PACKAGE_KIND",
+)
+
 # load("@rules_cc//cc:defs.bzl", "windows_resources")
 
 #load("@aspect_bazel_lib//lib:expand_make_vars.bzl", "expand_template")
@@ -23,19 +35,6 @@ package(
 )
 
 # Not complete rough patch from CMakeLists.txt
-ARROW_VERSION_MINOR = 16
-
-ARROW_VERSION_MAJOR = 0
-
-ARROW_VERSION_PATCH = 0
-
-ARROW_VERSION = "%d.%d.%d-bazel" % (ARROW_VERSION_MAJOR, ARROW_VERSION_MINOR, ARROW_VERSION_PATCH)
-
-ARROW_SO_VERSION = "%d" % (ARROW_VERSION_MAJOR * 100 + ARROW_VERSION_MINOR)
-
-ARROW_FULL_SO_VERSION = "%s.%d.%d" % (ARROW_SO_VERSION, ARROW_VERSION_PATCH, 0)
-
-ARROW_PACKAGE_KIND = "bazel"  # From git-grepping, some of the other choices are: conan, vcpkg, python-wheel-macos, python-wheel-windows
 
 CMAKE_CXX_COMPILER_ID = "todo_cmake_cxx_compiler_id"
 
@@ -81,7 +80,7 @@ expand_template(
         "#cmakedefine ARROW_JEMALLOC": "",  # "define ARROW_JEMALLOC",
         "#cmakedefine ARROW_JSON": "#define ARROW_JSON",
         "#cmakedefine ARROW_ORC": "",  # "define ARROW_ORC",
-        "#cmakedefine ARROW_PARQUET": "",  # "define ARROW_PARQUET",
+        "#cmakedefine ARROW_PARQUET": "#define ARROW_PARQUET",
         "#cmakedefine ARROW_SUBSTRAIT": "",  # "define ARROW_SUBSTRAIT",
         "#cmakedefine ARROW_ENABLE_THREADING": "#define ARROW_ENABLE_THREADING",
         "#cmakedefine ARROW_GCS": "",  # "define ARROW_GCS",
@@ -90,7 +89,7 @@ expand_template(
         "#cmakedefine ARROW_WITH_MUSL": "",  # "define ARROW_WITH_MUSL",
         "#cmakedefine ARROW_WITH_OPENTELEMETRY": "",  # "define ARROW_WITH_OPENTELEMETRY",
         "#cmakedefine ARROW_WITH_UCX": "",  # "define ARROW_WITH_UCX",
-        "#cmakedefine PARQUET_REQUIRE_ENCRYPTION": "",  # "define PARQUET_REQUIRE_ENCRYPTION",
+        "#cmakedefine PARQUET_REQUIRE_ENCRYPTION": "#define PARQUET_REQUIRE_ENCRYPTION",
     },
     template = "util/config.h.cmake",
 )
@@ -295,6 +294,7 @@ ARROW_SRCS = [
 ]
 
 ARROW_HDRS = [
+    "util/spaced.h",
     "api.h",
     "io/api.h",
     "stl.h",
@@ -445,6 +445,7 @@ ARROW_HDRS = [
     "type_traits.h",
     "type.h",
     "sparse_tensor.h",
+    "util/concurrent_map.h",
     "util/algorithm.h",
     "util/align_util.h",
     "util/aligned_storage.h",
@@ -536,8 +537,6 @@ ARROW_HDRS = [
     "util/utf8.h",
     "util/value_parsing.h",
     "util/vector.h",
-    "util/windows_compatibility.h",
-    "util/windows_fixup.h",
     "visit_array_inline.h",
     "visit_data_inline.h",
     "visit_scalar_inline.h",
@@ -580,7 +579,16 @@ cc_library(
 )
 
 cc_library(
-    name = "arrow",
+    name = "windows",
+    hdrs = [
+        "util/windows_compatibility.h",
+        "util/windows_fixup.h",
+    ],
+    include_prefix = "arrow",
+)
+
+cc_library(
+    name = "internal",
     srcs = ARROW_SRCS,
     hdrs = ARROW_HDRS,
     include_prefix = "arrow",
@@ -597,7 +605,8 @@ cc_library(
         "//cpp/src/arrow/vendored/portable-snippets",
         "//cpp/src/arrow/vendored/uriparser",
         "//cpp/src/arrow/vendored/utfcpp",
-        "//cpp/src/generated",
+        "//cpp/src/generated:arrow_flatbuffers",
+        "windows",
         "@rapidjson",
     ],
 )
@@ -612,6 +621,15 @@ cc_library(
     name = "extension_type",
     srcs = ["extension_type.cc"],
     deps = [ "//cpp/src/arrow/extension" ],
+)
+
+cc_library(
+    name = "arrow",
+    deps = [
+        "internal",
+        "sparse_tensor",
+        "extension_type",
+    ],
 )
 
 cc_library(

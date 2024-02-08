@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "d7c9a04bb65cd8c9d709bd23e372b9f42ebbe3918ddff6cc01ef3c89950a6d27",
+  "moduleFileHash": "285164508792d544c3d1cca1b918a37c0576276984a036a0a85392d5b242be13",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -30,7 +30,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 22,
+            "line": 23,
             "column": 21
           },
           "imports": {},
@@ -44,7 +44,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 23,
+                "line": 24,
                 "column": 15
               }
             }
@@ -58,7 +58,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 26,
+            "line": 27,
             "column": 20
           },
           "imports": {
@@ -78,7 +78,7 @@
               "devDependency": true,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 28,
+                "line": 29,
                 "column": 23
               }
             }
@@ -94,6 +94,7 @@
         "gflags": "gflags@2.2.2",
         "rapidjson": "rapidjson@1.1.0",
         "zlib": "zlib@1.3",
+        "boringssl": "boringssl@0.0.0-20240126-22d349c",
         "aspect_rules_js": "aspect_rules_js@1.37.1",
         "aspect_rules_ts": "aspect_rules_ts@2.1.1",
         "aspect_bazel_lib": "aspect_bazel_lib@2.3.0",
@@ -288,6 +289,37 @@
           "remote_patches": {
             "https://bcr.bazel.build/modules/zlib/1.3/patches/add_build_file.patch": "sha256-Ei+FYaaOo7A3jTKunMEodTI0Uw5NXQyZEcboMC8JskY=",
             "https://bcr.bazel.build/modules/zlib/1.3/patches/module_dot_bazel.patch": "sha256-fPWLM+2xaF/kuy+kZc1YTfW6hNjrkG400Ho7gckuyJk="
+          },
+          "remote_patch_strip": 0
+        }
+      }
+    },
+    "boringssl@0.0.0-20240126-22d349c": {
+      "name": "boringssl",
+      "version": "0.0.0-20240126-22d349c",
+      "key": "boringssl@0.0.0-20240126-22d349c",
+      "repoName": "boringssl",
+      "executionPlatformsToRegister": [],
+      "toolchainsToRegister": [],
+      "extensionUsages": [],
+      "deps": {
+        "rules_cc": "rules_cc@0.0.9",
+        "platforms": "platforms@0.0.8",
+        "bazel_tools": "bazel_tools@_",
+        "local_config_platform": "local_config_platform@_"
+      },
+      "repoSpec": {
+        "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "ruleClassName": "http_archive",
+        "attributes": {
+          "name": "boringssl~0.0.0-20240126-22d349c",
+          "urls": [
+            "https://github.com/google/boringssl/archive/22d349c4596e81425ec88f82fab47063a9a2bac6.tar.gz"
+          ],
+          "integrity": "sha256-rMEdcuN6QX90hSzHXUCE7HEhcnwBvR6bVSUjHJsDwnc=",
+          "strip_prefix": "boringssl-22d349c4596e81425ec88f82fab47063a9a2bac6",
+          "remote_patches": {
+            "https://bcr.bazel.build/modules/boringssl/0.0.0-20240126-22d349c/patches/module_dot_bazel.patch": "sha256-vLc6oUB/XI3PtPUx1z0U5e+l6BEuz3IeRW7wR8Omp14="
           },
           "remote_patch_strip": 0
         }

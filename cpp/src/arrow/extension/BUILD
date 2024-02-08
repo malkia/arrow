@@ -12,7 +12,7 @@ cc_library(
     ],
     include_prefix = "arrow/extension",
     deps = [
-        "//cpp/src/arrow",
+        "//cpp/src/arrow:internal",
     ],
 )
 

@@ -1,0 +1,7 @@
+ARROW_VERSION_MINOR = 16
+ARROW_VERSION_MAJOR = 0
+ARROW_VERSION_PATCH = 0
+ARROW_VERSION = "%d.%d.%d-bazel" % (ARROW_VERSION_MAJOR, ARROW_VERSION_MINOR, ARROW_VERSION_PATCH)
+ARROW_SO_VERSION = "%d" % (ARROW_VERSION_MAJOR * 100 + ARROW_VERSION_MINOR)
+ARROW_FULL_SO_VERSION = "%s.%d.%d" % (ARROW_SO_VERSION, ARROW_VERSION_PATCH, 0)
+ARROW_PACKAGE_KIND = "bazel"  # From git-grepping, some of the other choices are: conan, vcpkg, python-wheel-macos, python-wheel-windows
