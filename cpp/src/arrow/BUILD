@@ -190,8 +190,6 @@ ARROW_SRCS = [
     "config.cc",
     "datum.cc",
     "device.cc",
-    "extension_type.cc",
-    "extension/fixed_shape_tensor.cc",
     "filesystem/filesystem.cc",
     "filesystem/localfs.cc",
     "filesystem/mockfs.cc",
@@ -227,14 +225,10 @@ ARROW_SRCS = [
     "record_batch.cc",
     "result.cc",
     "scalar.cc",
-    "sparse_tensor.cc",
     "status.cc",
     "table_builder.cc",
     "table.cc",
     "tensor.cc",
-    "tensor/coo_converter.cc",
-    "tensor/csf_converter.cc",
-    "tensor/csx_converter.cc",
     "type_traits.cc",
     "type.cc",
     "util/align_util.cc",
@@ -391,7 +385,6 @@ ARROW_HDRS = [
     "datum.h",
     "device.h",
     "extension_type.h",
-    "extension/fixed_shape_tensor.h",
     "filesystem/api.h",
     "filesystem/filesystem.h",
     "filesystem/localfs.h",
@@ -442,18 +435,16 @@ ARROW_HDRS = [
     "result_internal.h",
     "result.h",
     "scalar.h",
-    "sparse_tensor.h",
     "status.h",
     "stl_allocator.h",
     "stl_iterator.h",
     "table_builder.h",
     "table.h",
     "tensor.h",
-    "tensor/converter_internal.h",
-    "tensor/converter.h",
     "type_fwd.h",
     "type_traits.h",
     "type.h",
+    "sparse_tensor.h",
     "util/algorithm.h",
     "util/align_util.h",
     "util/aligned_storage.h",
@@ -609,6 +600,18 @@ cc_library(
         "//cpp/src/generated",
         "@rapidjson",
     ],
+)
+
+cc_library(
+    name = "sparse_tensor",
+    srcs = ["sparse_tensor.cc"],
+    deps = [ "//cpp/src/arrow/tensor" ],
+)
+
+cc_library(
+    name = "extension_type",
+    srcs = ["extension_type.cc"],
+    deps = [ "//cpp/src/arrow/extension" ],
 )
 
 cc_library(
@@ -783,6 +786,5 @@ cc_library(
     "compute/kernels/vector_selection_benchmark",
     "compute/kernels/vector_sort_benchmark",
     "compute/kernels/vector_topk_benchmark",
-    "tensor/tensor_conversion_benchmark",
     "builder_benchmark",
 ]]

@@ -23,7 +23,7 @@ common --enable_platform_specific_config
 #            _Ty=arrow::Result<arrow::MoveOnlyDataType>
 #        ]
 #
-build:windows    --copt="/Brepro"    --copt="/guard:cf" --copt="/Z7" --copt="/JMC-" --cxxopt="/std:c++20" --copt="/sdl" --copt="-D_SILENCE_CXX20_OLD_SHARED_PTR_ATOMIC_SUPPORT_DEPRECATION_WARNING" --copt="-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING" --copt="-D_SILENCE_CXX20_MOVE_ITERATOR_ARROW_DEPRECATION_WARNING" --copt="-utf-8"
+build:windows    --copt="/Brepro"    --copt="/guard:cf" --copt="/Z7" --copt="/JMC-" --cxxopt="/std:c++20" --copt="/sdl" --copt="-D_SILENCE_CXX20_OLD_SHARED_PTR_ATOMIC_SUPPORT_DEPRECATION_WARNING" --copt="-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING" --copt="-D_SILENCE_CXX20_MOVE_ITERATOR_ARROW_DEPRECATION_WARNING" --copt="-utf-8" --copt="-wd4996"
 build:windows --linkopt="/Brepro" --linkopt="/guard:cf" --linkopt="/DEBUG:FULL" --linkopt="/CETCOMPAT" --linkopt="/OPT:REF,ICF" --linkopt="/RELEASE"
 common:linux --cxxopt=-std=c++20
 common:macos --cxxopt=-std=c++20
