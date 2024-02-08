@@ -62,12 +62,16 @@ cc_library(
     include_prefix = "arrow/dataset",
     deps = [
         "//cpp/src/arrow/acero",
+        "//cpp/src/parquet/arrow",
     ],
 )
 
 cc_library(
     name = "dataset",
-    deps = ["internal", "file_csv"],
+    deps = [
+        "file_csv",
+        "internal",
+    ],
 )
 
 cc_library(
@@ -94,10 +98,11 @@ cc_library(
         "generate_pdb_file",
     ],
     deps = [
-        "test_util",
         "dataset",
-        #"//cpp/src/arrow:test_common",
+        "test_util",
+        "//cpp/src/arrow:test_common",
         "//cpp/src/arrow/acero:test_util",
+        "//cpp/src/parquet:test_util",
         "@googletest//:gtest_main",
     ],
 ) for name in [
@@ -120,13 +125,22 @@ cc_library(
 [cc_test(
     name = name,
     srcs = [name + ".cc"],
+    data = [
+        # This declares all data
+        "//cpp/submodules:parquet-testing",
+        # This is to get to one file to the "data" folder, and then /.. to it (hack!)
+        "//cpp/submodules:parquet-testing/data/README.md",
+    ],
+    env = {
+        "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules:parquet-testing/data/README.md)/../",
+    },
     features = [
         "generate_pdb_file",
     ],
     deps = [
         "dataset",
-        "//cpp/src/arrow:filesystem_test_util",
         "//cpp/src/arrow:benchmark_common",
+        "//cpp/src/arrow:filesystem_test_util",
     ],
 ) for name in [
     "file_benchmark",

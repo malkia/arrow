@@ -277,7 +277,7 @@ ARROW_SRCS = [
     "util/utf8.cc",
     "util/value_parsing.cc",
     "visitor.cc",
-    #    "compute/kernels/aggregate_basic_avx2.cc",
+    "compute/kernels/aggregate_basic_avx2.cc",
     #    "compute/kernels/aggregate_basic_avx512.cc",
     #    "compute/key_hash_avx2.cc",
     #    "compute/key_map_avx2.cc",

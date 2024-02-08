@@ -1,3 +1,7 @@
+package(
+    default_visibility = ["//visibility:public"],
+)
+
 cc_library(
     name = "arrow",
     srcs = [
@@ -44,12 +48,12 @@ cc_library(
     ],
     data = [
         # This declares all data
-        "//cpp/submodules/parquet-testing:data",
+        "//cpp/submodules:parquet-testing",
         # This is to get to one file to the "data" folder, and then /.. to it (hack!)
-        "//cpp/submodules/parquet-testing:data/README.md",
+        "//cpp/submodules:parquet-testing/data/README.md",
     ],
     env = {
-        "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules/parquet-testing:data/README.md)/../",
+        "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules:parquet-testing/data/README.md)/../",
     },
     deps = [
         "test_util",

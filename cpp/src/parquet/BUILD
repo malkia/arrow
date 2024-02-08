@@ -152,6 +152,8 @@ cc_library(
     name = "test_util",
     testonly = 1,
     srcs = [
+        "encryption/test_encryption_util.cc",
+        "encryption/test_in_memory_kms.cc",
         "test_util.cc",
     ],
     hdrs = [
@@ -186,18 +188,18 @@ cc_library(
 [cc_test(
     name = name,
     srcs = [name + ".cc"],
+    data = [
+        # This declares all data
+        "//cpp/submodules:parquet-testing",
+        # This is to get to one file to the "data" folder, and then /.. to it (hack!)
+        "//cpp/submodules:parquet-testing/data/README.md",
+    ],
+    env = {
+        "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules:parquet-testing/data/README.md)/../",
+    },
     features = [
         "generate_pdb_file",
     ],
-    data = [
-        # This declares all data
-        "//cpp/submodules/parquet-testing:data",
-        # This is to get to one file to the "data" folder, and then /.. to it (hack!)
-        "//cpp/submodules/parquet-testing:data/README.md",
-    ],
-    env = {
-        "PARQUET_TEST_DATA": "$(rootpath //cpp/submodules/parquet-testing:data/README.md)/../",
-    },
     deps = [
         "test_util",
         "//cpp/src/parquet/api",
