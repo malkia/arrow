@@ -1,15 +1,15 @@
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-
 load(
     "//bazel:version.bzl",
     "ARROW_FULL_SO_VERSION",
+    "ARROW_PACKAGE_KIND",
     "ARROW_SO_VERSION",
     "ARROW_VERSION",
     "ARROW_VERSION_MAJOR",
     "ARROW_VERSION_MINOR",
     "ARROW_VERSION_PATCH",
-    "ARROW_PACKAGE_KIND",
 )
 
 # load("@rules_cc//cc:defs.bzl", "windows_resources")
@@ -557,7 +557,14 @@ ARROW_HDRS = [
 
 cc_library(
     name = "config",
-    defines = ["ARROW_STATIC=1"],
+    defines = [
+        "ARROW_STATIC=1",
+        # TODO: Move these to some config.h
+        "ARROW_WITH_LZ4",
+        "ARROW_WITH_BZ2",
+        "ARROW_WITH_ZSTD",
+        "ARROW_WITH_ZLIB",
+    ],
     # deps = select({
     #     "@platforms//os:windows": ["longpaths"],
     #     "//conditions:default": [],
@@ -594,6 +601,7 @@ cc_library(
     include_prefix = "arrow",
     deps = [
         "visibility",
+        "windows",
         "//cpp/src/arrow/vendored:base64",
         "//cpp/src/arrow/vendored:datetime",
         "//cpp/src/arrow/vendored:pcq",
@@ -606,7 +614,6 @@ cc_library(
         "//cpp/src/arrow/vendored/uriparser",
         "//cpp/src/arrow/vendored/utfcpp",
         "//cpp/src/generated:arrow_flatbuffers",
-        "windows",
         "@rapidjson",
     ],
 )
@@ -614,21 +621,75 @@ cc_library(
 cc_library(
     name = "sparse_tensor",
     srcs = ["sparse_tensor.cc"],
-    deps = [ "//cpp/src/arrow/tensor" ],
+    deps = ["//cpp/src/arrow/tensor"],
 )
 
 cc_library(
     name = "extension_type",
     srcs = ["extension_type.cc"],
-    deps = [ "//cpp/src/arrow/extension" ],
+    deps = ["//cpp/src/arrow/extension"],
+)
+
+cc_library(
+    name = "compression_bz2",
+    srcs = ["util/compression_bz2.cc"],
+    deps = [
+        "internal",
+        "@bzip2//:bz2",
+    ],
+)
+
+cc_library(
+    name = "compression_lz4",
+    srcs = ["util/compression_lz4.cc"],
+    deps = [
+        "internal",
+        "@lz4//:lz4_frame",
+    ],
+)
+
+cc_library(
+    name = "compression_zlib",
+    srcs = ["util/compression_zlib.cc"],
+    deps = [
+        "internal",
+        "@zlib",
+    ],
+)
+
+# Hack that writes a file that can be included as <zstd.h>
+write_file(
+    name = "compression_zstd_inc",
+    out = "compression_zstd_inc/zstd.h",
+    content = [
+        "#include <lib/zstd.h>",
+    ],
+)
+
+cc_library(
+    name = "compression_zstd",
+    srcs = [
+        "compression_zstd_inc/zstd.h",
+        "util/compression_zstd.cc",
+    ],
+    includes = ["compression_zstd_inc"],
+    deps = [
+        "internal",
+        "@zstd",
+    ],
 )
 
 cc_library(
     name = "arrow",
     deps = [
+        # TODO(malkia): Add snappy/brotli too
+        "compression_bz2",
+        "compression_lz4",
+        "compression_zstd",
+        "compression_zlib",
+        "extension_type",
         "internal",
         "sparse_tensor",
-        "extension_type",
     ],
 )
 
@@ -671,7 +732,7 @@ cc_library(
 )
 
 [cc_test(
-    name = name.replace("/","_"),
+    name = name.replace("/", "_"),
     srcs = [name + ".cc"],
     features = [
         "generate_pdb_file",
@@ -777,7 +838,7 @@ cc_library(
 )
 
 [cc_test(
-    name = name.replace("/","_"),
+    name = name.replace("/", "_"),
     srcs = [name + ".cc"],
     features = [
         "generate_pdb_file",
