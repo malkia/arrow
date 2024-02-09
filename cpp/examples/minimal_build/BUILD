@@ -1,10 +1,9 @@
-cc_binary(
+cc_test(
     name = "example",
     srcs = ["example.cc"],
-    # TODO(malkia): This does not yet work.
+    args = ["$(rootpath test.csv)"],
     data = ["test.csv"],
     deps = [
-        "//cpp/src/arrow",
         "//cpp/src/arrow/csv",
     ],
 )

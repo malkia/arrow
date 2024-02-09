@@ -185,16 +185,26 @@ class AzuriteEnv : public AzureEnvImpl<AzuriteEnv> {
         new AzuriteEnv("devstoreaccount1",
                        "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/"
                        "K1SZFPTOtr/KBHBeksoGMGw=="));
+#ifdef _MSC_VER
+    auto exe_path = bp::search_path("azurite.exe");
+    exe_path = "C:\\Users\\dstanev\\AppData\\Local\\Volta\\bin\\azurite.exe";
+#else
     auto exe_path = bp::search_path("azurite");
+#endif
     if (exe_path.empty()) {
       return Status::Invalid("Could not find Azurite emulator.");
     }
     ARROW_ASSIGN_OR_RAISE(self->temp_dir_, TemporaryDir::Make("azurefs-test-"));
     ARROW_ASSIGN_OR_RAISE(self->debug_log_path_,
                           self->temp_dir_->path().Join("debug.log"));
-    auto server_process = bp::child(
-        boost::this_process::environment(), exe_path, "--silent", "--location",
-        self->temp_dir_->path().ToString(), "--debug", self->debug_log_path_.ToString());
+#ifdef _MSC_VER
+    auto environment = boost::this_process::wenvironment();
+#else
+    auto environment = boost::this_process::environment();
+#endif
+    auto server_process = bp::child(environment, exe_path, "--silent", "--location",
+                                    self->temp_dir_->path().ToString(), "--debug",
+                                    self->debug_log_path_.ToString());
     if (!server_process.valid() || !server_process.running()) {
       server_process.terminate();
       server_process.wait();

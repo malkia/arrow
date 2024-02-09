@@ -126,8 +126,6 @@ ARROW_SRCS = [
     "compute/api_vector.cc",
     "compute/cast.cc",
     "compute/exec.cc",
-    "compute/expression.cc",
-    "compute/function_internal.cc",
     "compute/function.cc",
     "compute/kernel.cc",
     "compute/kernels/aggregate_basic.cc",
@@ -197,14 +195,6 @@ ARROW_SRCS = [
     "io/slow.cc",
     "io/stdio.cc",
     "io/transform.cc",
-    "ipc/dictionary.cc",
-    "ipc/feather.cc",
-    "ipc/json_simple.cc",
-    "ipc/message.cc",
-    "ipc/metadata_internal.cc",
-    "ipc/options.cc",
-    "ipc/reader.cc",
-    "ipc/writer.cc",
     "json/chunked_builder.cc",
     "json/chunker.cc",
     "json/converter.cc",
@@ -332,8 +322,8 @@ ARROW_HDRS = [
     "compute/cast.h",
     "compute/exec_internal.h",
     "compute/exec.h",
-    "compute/expression_internal.h",
     "compute/expression.h",
+    "compute/expression_internal.h",
     "compute/function_internal.h",
     "compute/function_options.h",
     "compute/function.h",
@@ -387,18 +377,6 @@ ARROW_HDRS = [
     "io/transform.h",
     "io/type_fwd.h",
     "io/util_internal.h",
-    "ipc/api.h",
-    "ipc/dictionary.h",
-    "ipc/feather.h",
-    "ipc/json_simple.h",
-    "ipc/message.h",
-    "ipc/metadata_internal.h",
-    "ipc/options.h",
-    "ipc/reader_internal.h",
-    "ipc/reader.h",
-    "ipc/type_fwd.h",
-    "ipc/util.h",
-    "ipc/writer.h",
     "json/api.h",
     "json/chunked_builder.h",
     "json/chunker.h",
@@ -654,17 +632,32 @@ cc_library(
 )
 
 cc_library(
+    name = "compute_expression",
+    srcs = [
+        "compute/expression.cc",
+        "compute/function_internal.cc",
+    ],
+    include_prefix = "arrow",
+    deps = [
+        "internal",
+        "//cpp/src/arrow/ipc",
+    ],
+)
+
+cc_library(
     name = "arrow",
     deps = [
         # TODO(malkia): Add snappy/brotli too
+        "internal",
         "compression_bz2",
         "compression_lz4",
         "compression_zstd",
         "compression_zlib",
         "extension_type",
-        "internal",
         "sparse_tensor",
+        "compute_expression",
         "//cpp/src/arrow/filesystem",
+        "//cpp/src/arrow/ipc",
     ],
 )
 
@@ -674,13 +667,11 @@ cc_library(
     srcs = [
         "compute/kernels/test_util.cc",
         "io/test_common.cc",
-        "ipc/test_common.cc",
         "util/test_common.cc",
     ],
     hdrs = [
         "compute/kernels/test_util.h",
         "io/test_common.h",
-        "ipc/test_common.h",
         "json/test_common.h",
         "memory_pool_test.h",
         "util/test_common.h",

@@ -30,7 +30,7 @@ using arrow::Status;
 namespace {
 
 Status RunMain(int argc, char** argv) {
-  const char* csv_filename = "test.csv";
+  const char* csv_filename = argc == 2 ? argv[1] : "test.csv";
   const char* arrow_filename = "test.arrow";
 
   std::cerr << "* Reading CSV file '" << csv_filename << "' into table" << std::endl;

@@ -3,5 +3,11 @@ package(
 )
 
 exports_files(
-    ["version.bzl", "thrift.BUILD", "xsimd.BUILD"],
+    [
+        "azure.BUILD",
+        "thrift.BUILD",
+        "version.bzl",
+        "wil.BUILD",
+        "xsimd.BUILD",
+    ],
 )

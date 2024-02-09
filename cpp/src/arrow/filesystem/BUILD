@@ -3,14 +3,13 @@ package(
 )
 
 cc_library(
-    name = "filesystem",
+    name = "internal",
     srcs = [
         "filesystem.cc",
         "localfs.cc",
         "mockfs.cc",
         "path_util.cc",
         "util_internal.cc",
-        #"azurefs.cc",
         #"gcsfs.cc",
         #"gcsfs_internal.cc",
         #"hdfs.cc",
@@ -25,8 +24,6 @@ cc_library(
         "path_util.h",
         "type_fwd.h",
         "util_internal.h",
-        #"azurefs.h",
-        #"azurefs_internal.h",
         #"gcsfs.h",
         #"gcsfs_internal.h",
         #"hdfs.h",
@@ -36,6 +33,22 @@ cc_library(
     include_prefix = "arrow/filesystem",
     deps = [
         "//cpp/src/arrow:internal",
+    ],
+)
+
+cc_library(
+    name = "azure",
+    srcs = ["azurefs.cc"],
+    hdrs = [
+        "azurefs.h",
+        "azurefs_internal.h",
+    ],
+    include_prefix = "arrow/filesystem",
+    deps = [
+        "internal",
+        "@com_github_azure_sdk//:identity",
+        "@com_github_azure_sdk//:storage_blobs",
+        "@com_github_azure_sdk//:storage_files_datalake",
     ],
 )
 
@@ -50,8 +63,28 @@ cc_library(
     ],
     include_prefix = "arrow/filesystem",
     deps = [
-        "filesystem",
+        "internal",
         "//cpp/src/arrow/testing",
+    ],
+)
+
+cc_test(
+    name = "azurefs_test",
+    srcs = ["azurefs_test.cc"],
+    deps = [
+        "azure",
+        "test_util",
+        "@boost//:asio",
+        "@boost//:process",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "filesystem",
+    deps = [
+        "azure",
+        "internal",
     ],
 )
 
@@ -65,7 +98,6 @@ cc_library(
 ) for name in [
     "filesystem_test",
     "localfs_test",
-    #"azurefs_test",
     #"gcsfs_test",
     #"hdfs_test",
     #"s3fs_narrative_test",
@@ -74,8 +106,8 @@ cc_library(
 
 [cc_test(
     name = name,
-    srcs = [name + ".cc"],
     timeout = "eternal",
+    srcs = [name + ".cc"],
     deps = [
         "test_util",
         "@google_benchmark//:benchmark_main",

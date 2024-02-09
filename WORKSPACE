@@ -31,3 +31,19 @@ http_archive(
     strip_prefix = "xsimd-12.1.1",
     build_file = "//bazel:xsimd.BUILD",
 )
+
+http_archive(
+    name = "com_github_microsoft_wil",
+    url = "https://github.com/microsoft/wil/archive/refs/tags/v1.0.240122.1.tar.gz",
+    integrity = "sha256-5ZnyhDwBueSCfkbxHTZRGAZ1yOzbuova5zX1M2cpidM=",
+    strip_prefix = "wil-1.0.240122.1",
+    build_file = "//bazel:wil.BUILD",
+)
+
+http_archive(
+    name = "com_github_azure_sdk",
+    url = "https://github.com/Azure/azure-sdk-for-cpp/archive/refs/tags/azure-core_1.11.1.tar.gz",
+    integrity = "sha256-YNsLwrQARusy3gGsFN+Fq7tN95VNuJBoV9DZAnpuQh4=",
+    strip_prefix = "azure-sdk-for-cpp-azure-core_1.11.1",
+    build_file = "//bazel:azure.BUILD",
+)
