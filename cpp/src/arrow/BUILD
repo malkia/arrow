@@ -1,6 +1,5 @@
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("@bazel_skylib//lib:paths.bzl", "paths")
 load(
     "//bazel:version.bzl",
     "ARROW_FULL_SO_VERSION",

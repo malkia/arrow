@@ -26,7 +26,7 @@ cc_binary(
         "examples/mandelbrot.cpp",
         "examples/pico_bench.hpp",
     ],
-    deps = [ "xsimd" ],
+    deps = ["xsimd"],
 )
 
 # bazel test -c opt @com_github_xtensorstack_xsimd//:tests
