@@ -23,3 +23,11 @@ http_archive(
 )
 load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
 boost_deps()
+
+http_archive(
+    name = "com_github_xtensorstack_xsimd",
+    integrity = "sha256-c/lKBRJ47z2kUztpHTEkTRIHTV1xEHRzqf2Ne+FfARA=",
+    url = "https://github.com/xtensor-stack/xsimd/archive/refs/tags/12.1.1.tar.gz",
+    strip_prefix = "xsimd-12.1.1",
+    build_file = "//bazel:xsimd.BUILD",
+)

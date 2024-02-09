@@ -86,7 +86,7 @@ cc_library(
     include_prefix = "arrow/dataset",
     deps = [
         "dataset",
-        "//cpp/src/arrow:filesystem_test_util",
+        "//cpp/src/arrow/filesystem:test_util",
         "//cpp/src/arrow/testing",
     ],
 )
@@ -140,7 +140,7 @@ cc_library(
     deps = [
         "dataset",
         "//cpp/src/arrow:benchmark_common",
-        "//cpp/src/arrow:filesystem_test_util",
+        "//cpp/src/arrow/filesystem:test_util",
     ],
 ) for name in [
     "file_benchmark",

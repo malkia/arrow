@@ -189,11 +189,6 @@ ARROW_SRCS = [
     "config.cc",
     "datum.cc",
     "device.cc",
-    "filesystem/filesystem.cc",
-    "filesystem/localfs.cc",
-    "filesystem/mockfs.cc",
-    "filesystem/path_util.cc",
-    "filesystem/util_internal.cc",
     "io/buffered.cc",
     "io/caching.cc",
     "io/compressed.cc",
@@ -286,11 +281,6 @@ ARROW_SRCS = [
     #    "compute/util_avx2.cc",
     #    "io/hdfs_internal.cc",
     #    "io/hdfs.cc",
-    # filesystem/azurefs.cc
-    # filesystem/gcsfs_internal.cc
-    # filesystem/gcsfs.cc
-    # filesystem/hdfs.cc
-    # filesystem/s3fs.cc
 ]
 
 ARROW_HDRS = [
@@ -385,13 +375,6 @@ ARROW_HDRS = [
     "datum.h",
     "device.h",
     "extension_type.h",
-    "filesystem/api.h",
-    "filesystem/filesystem.h",
-    "filesystem/localfs.h",
-    "filesystem/mockfs.h",
-    "filesystem/path_util.h",
-    "filesystem/type_fwd.h",
-    "filesystem/util_internal.h",
     "io/buffered.h",
     "io/caching.h",
     "io/compressed.h",
@@ -543,16 +526,8 @@ ARROW_HDRS = [
     "visit_type_inline.h",
     "visitor_generate.h",
     "visitor.h",
-    #filesystem/hdfs.h
     #io/hdfs_internal.h
     #io/hdfs.h
-    #filesystem/azurefs_internal.h
-    #filesystem/azurefs.h
-    #filesystem/gcsfs_internal.h
-    #filesystem/gcsfs.h
-    #filesystem/hdfs.h
-    #filesystem/s3_internal.h
-    #filesystem/s3fs.h
 ]
 
 cc_library(
@@ -690,6 +665,7 @@ cc_library(
         "extension_type",
         "internal",
         "sparse_tensor",
+        "//cpp/src/arrow/filesystem",
     ],
 )
 
@@ -709,21 +685,6 @@ cc_library(
         "json/test_common.h",
         "memory_pool_test.h",
         "util/test_common.h",
-    ],
-    include_prefix = "arrow",
-    deps = [
-        "//cpp/src/arrow/testing",
-    ],
-)
-
-cc_library(
-    name = "filesystem_test_util",
-    testonly = 1,
-    srcs = [
-        "filesystem/test_util.cc",
-    ],
-    hdrs = [
-        "filesystem/test_util.h",
     ],
     include_prefix = "arrow",
     deps = [

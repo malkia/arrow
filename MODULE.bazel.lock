@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "28bb29b01ac00910c13e97862d918d904b795603903ff45a60cde242d2d90bcd",
+  "moduleFileHash": "bac5c48ea75ea60e9d8592ae3244d3c8968a62e5e75b3f9068da5468a2f3589e",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -30,7 +30,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 26,
+            "line": 28,
             "column": 21
           },
           "imports": {},
@@ -44,7 +44,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 27,
+                "line": 29,
                 "column": 15
               }
             }
@@ -58,7 +58,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 30,
+            "line": 32,
             "column": 20
           },
           "imports": {
@@ -78,7 +78,7 @@
               "devDependency": true,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 32,
+                "line": 34,
                 "column": 23
               }
             }
@@ -98,6 +98,7 @@
         "lz4": "lz4@1.9.4",
         "zstd": "zstd@1.5.5",
         "bzip2": "bzip2@1.0.8",
+        "doctest": "doctest@2.4.11",
         "aspect_rules_js": "aspect_rules_js@1.37.1",
         "aspect_rules_ts": "aspect_rules_ts@2.1.1",
         "aspect_bazel_lib": "aspect_bazel_lib@2.3.0",
@@ -416,6 +417,35 @@
           "remote_patches": {
             "https://bcr.bazel.build/modules/bzip2/1.0.8/patches/add_build_file.patch": "sha256-xJNk2k+qB6WjPQYB00KeIXmH/9k3asL6en5schN9hMI=",
             "https://bcr.bazel.build/modules/bzip2/1.0.8/patches/module_dot_bazel.patch": "sha256-0L0dzTSwiKpuEZAqbpUf+x+WOXt0qyCX8lBR+bRZ7so="
+          },
+          "remote_patch_strip": 0
+        }
+      }
+    },
+    "doctest@2.4.11": {
+      "name": "doctest",
+      "version": "2.4.11",
+      "key": "doctest@2.4.11",
+      "repoName": "doctest",
+      "executionPlatformsToRegister": [],
+      "toolchainsToRegister": [],
+      "extensionUsages": [],
+      "deps": {
+        "bazel_tools": "bazel_tools@_",
+        "local_config_platform": "local_config_platform@_"
+      },
+      "repoSpec": {
+        "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "ruleClassName": "http_archive",
+        "attributes": {
+          "name": "doctest~2.4.11",
+          "urls": [
+            "https://github.com/doctest/doctest/archive/refs/tags/v2.4.11.tar.gz"
+          ],
+          "integrity": "sha256-Yy7SwFp/U/qWE4FJe/gGkJPw1mKMXyYoYWH70ypWAYY=",
+          "strip_prefix": "doctest-2.4.11",
+          "remote_patches": {
+            "https://bcr.bazel.build/modules/doctest/2.4.11/patches/add_module_dot_bazel.patch": "sha256-zaZUP676XriQHLzVTZ3/9c57rif89f/NrcHjfeYUhUg="
           },
           "remote_patch_strip": 0
         }

@@ -1,4 +1,4 @@
-[cc_binary(
+[cc_test(
     name = name,
     includes = ["."],
     srcs = [name + ".cc"] + ["reader_writer.h"],

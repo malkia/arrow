@@ -10,6 +10,8 @@ bazel_dep(name = "boringssl", version = "0.0.0-20240126-22d349c")
 bazel_dep(name = "lz4", version = "1.9.4")
 bazel_dep(name = "zstd", version = "1.5.5")
 bazel_dep(name = "bzip2", version = "1.0.8")
+# Used by xsimd
+bazel_dep(name = "doctest", version = "2.4.11", dev_dependency = True)
 # needed by flatbuffers
 bazel_dep(name = "aspect_rules_js", version = "1.37.1")
 bazel_dep(name = "aspect_rules_ts", version = "2.1.1")

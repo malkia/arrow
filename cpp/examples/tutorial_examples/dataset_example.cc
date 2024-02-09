@@ -25,7 +25,11 @@
 #include <parquet/arrow/reader.h>
 #include <parquet/arrow/writer.h>
 
+#ifdef _MSC_VER
+#include <direct.h>
+#else
 #include <unistd.h>
+#endif
 #include <iostream>
 // (Doc section: Includes)
 

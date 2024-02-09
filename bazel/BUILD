@@ -3,5 +3,5 @@ package(
 )
 
 exports_files(
-    ["version.bzl", "thrift.BUILD"],
+    ["version.bzl", "thrift.BUILD", "xsimd.BUILD"],
 )
