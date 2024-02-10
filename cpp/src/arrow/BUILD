@@ -693,6 +693,7 @@ cc_library(
         "//cpp/src/arrow/csv:test_common",
         "//cpp/src/arrow/dataset",
         "//cpp/src/arrow/dataset:file_csv",
+        "//cpp/src/arrow/ipc:test_common",
         "@googletest//:gtest_main",
     ],
 ) for name in [

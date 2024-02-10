@@ -32,6 +32,7 @@ cc_test(
     deps = [
         "integration",
         "//cpp/src/arrow:test_common",
+        "//cpp/src/arrow/ipc:test_common",
         "@googletest//:gtest_main",
     ],
 )

@@ -17,7 +17,11 @@
 
 #include <arrow/io/file.h>
 #include <arrow/util/logging.h>
+#ifdef _MSC_VER
+#include <Windows.h>
+#else
 #include <dirent.h>
+#endif
 #include <parquet/api/reader.h>
 #include <parquet/api/writer.h>
 
@@ -113,6 +117,18 @@ bool FileNameEndsWith(std::string file_name, std::string suffix);
 
 std::vector<std::string> GetDirectoryFiles(const std::string& path) {
   std::vector<std::string> files;
+#ifdef _MSC_VER
+  WIN32_FIND_DATAA fd;
+  auto fh = FindFirstFileA(path.c_str(), &fd);
+  if( fh == INVALID_HANDLE_VALUE ) {
+    exit(-1);
+  }
+  do {
+    if( !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
+      files.push_back( path + "/" + fd.cFileName );
+  } while( FindNextFileA(fh, &fd) );
+  FindClose(fh);
+#else
   struct dirent* entry;
   DIR* dir = opendir(path.c_str());
 
@@ -123,6 +139,7 @@ std::vector<std::string> GetDirectoryFiles(const std::string& path) {
     files.push_back(std::string(entry->d_name));
   }
   closedir(dir);
+#endif
   return files;
 }
 
