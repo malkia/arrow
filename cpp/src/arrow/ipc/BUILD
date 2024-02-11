@@ -55,13 +55,13 @@ cc_library(
     srcs = [name + ".cc"],
     data = [
         # This declares all data
-        "//testing:data",
+        "//:testing_data",
         # This is to get to one file to the "data" folder, and then /.. to it (hack!)
-        "//testing:README.md",
+        "//:testing/README.md",
     ],
     env = {
-        "ARROW_TEST_DATA": "$(rootpath //testing:README.md)/../data/",
-    }, 
+        "ARROW_TEST_DATA": "$(rootpath //:testing/README.md)/../data/",
+    },
     deps = [
         "test_common",
         "@googletest//:gtest_main",
