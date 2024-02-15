@@ -708,6 +708,14 @@ class TestAzureFileSystem : public ::testing::Test {
     AssertFileInfo(fs(), dir1, FileType::Directory);
   }
 
+  void TestCreateDirOnRootWithTrailingSlash() {
+    auto dir1 = PreexistingData::RandomContainerName(rng_) + "/";
+
+    AssertFileInfo(fs(), dir1, FileType::NotFound);
+    ASSERT_OK(fs()->CreateDir(dir1, false));
+    AssertFileInfo(fs(), dir1, FileType::Directory);
+  }
+
   void TestCreateDirOnExistingContainer() {
     auto data = SetUpPreexistingData();
     auto dir1 = data.RandomDirectoryPath(rng_);
@@ -766,6 +774,15 @@ class TestAzureFileSystem : public ::testing::Test {
     AssertFileInfo(fs(), dir4, FileType::Directory);
     AssertFileInfo(fs(), subdir4, FileType::Directory);
     AssertFileInfo(fs(), subdir5, FileType::Directory);
+  }
+
+  void TestCreateDirOnExistingContainerWithTrailingSlash() {
+    auto data = SetUpPreexistingData();
+    auto dir1 = data.RandomDirectoryPath(rng_) + "/";
+
+    AssertFileInfo(fs(), dir1, FileType::NotFound);
+    ASSERT_OK(fs()->CreateDir(dir1, /*recursive=*/false));
+    AssertFileInfo(fs(), dir1, FileType::Directory);
   }
 
   void TestCreateDirOnMissingContainer() {
@@ -854,6 +871,21 @@ class TestAzureFileSystem : public ::testing::Test {
     AssertFileInfo(fs(), blob_path, FileType::NotFound);
   }
 
+  void TestNonEmptyDirWithTrailingSlash() {
+    if (HasSubmitBatchBug()) {
+      GTEST_SKIP() << kSubmitBatchBugMessage;
+    }
+    auto data = SetUpPreexistingData();
+    const auto directory_path = data.RandomDirectoryPath(rng_);
+    const auto blob_path = ConcatAbstractPath(directory_path, "hello.txt");
+    ASSERT_OK_AND_ASSIGN(auto output, fs()->OpenOutputStream(blob_path));
+    ASSERT_OK(output->Write("hello"));
+    ASSERT_OK(output->Close());
+    AssertFileInfo(fs(), blob_path, FileType::File);
+    ASSERT_OK(fs()->DeleteDir(directory_path + "/"));
+    AssertFileInfo(fs(), blob_path, FileType::NotFound);
+  }
+
   void TestDeleteDirSuccessHaveDirectory() {
     if (HasSubmitBatchBug()) {
       GTEST_SKIP() << kSubmitBatchBugMessage;
@@ -877,6 +909,20 @@ class TestAzureFileSystem : public ::testing::Test {
     HierarchicalPaths paths;
     CreateHierarchicalData(&paths);
     ASSERT_OK(fs()->DeleteDirContents(paths.directory));
+    AssertFileInfo(fs(), paths.directory, FileType::Directory);
+    for (const auto& sub_path : paths.sub_paths) {
+      AssertFileInfo(fs(), sub_path, FileType::NotFound);
+    }
+  }
+
+  void TestDeleteDirContentsSuccessExistWithTrailingSlash() {
+    if (HasSubmitBatchBug()) {
+      GTEST_SKIP() << kSubmitBatchBugMessage;
+    }
+    auto preexisting_data = SetUpPreexistingData();
+    HierarchicalPaths paths;
+    CreateHierarchicalData(&paths);
+    ASSERT_OK(fs()->DeleteDirContents(paths.directory + "/"));
     AssertFileInfo(fs(), paths.directory, FileType::Directory);
     for (const auto& sub_path : paths.sub_paths) {
       AssertFileInfo(fs(), sub_path, FileType::NotFound);
@@ -1198,29 +1244,31 @@ class TestAzureFileSystem : public ::testing::Test {
   void TestMovePath() {
     Status st;
     auto data = SetUpPreexistingData();
+    auto another_container = PreexistingData::RandomContainerName(rng_);
+    CreateContainer(another_container);
     // When source doesn't exist.
     ASSERT_MOVE("missing-container/src-path", data.ContainerPath("dest-path"), ENOENT);
     auto missing_path1 = data.RandomDirectoryPath(rng_);
     ASSERT_MOVE(missing_path1, "missing-container/path", ENOENT);
 
     // But when source exists...
+    // ...and containers are different, we get an error message telling cross-container
+    // moves are not implemented.
+    EXPECT_RAISES_WITH_MESSAGE_THAT(
+        NotImplemented,
+        HasCrossContainerNotImplementedMessage(data.ObjectPath(),
+                                               "missing-container/path"),
+        fs()->Move(data.ObjectPath(), "missing-container/path"));
+    EXPECT_RAISES_WITH_MESSAGE_THAT(
+        NotImplemented,
+        HasCrossContainerNotImplementedMessage(
+            data.ObjectPath(), ConcatAbstractPath(another_container, "path")),
+        fs()->Move(data.ObjectPath(), ConcatAbstractPath(another_container, "path")));
+    AssertFileInfo(fs(), data.ObjectPath(), FileType::File);
+
     if (!WithHierarchicalNamespace()) {
-      // ...and containers are different, we get an error message telling cross-container
-      // moves are not implemented.
-      EXPECT_RAISES_WITH_MESSAGE_THAT(
-          NotImplemented,
-          HasCrossContainerNotImplementedMessage(data.ObjectPath(),
-                                                 "missing-container/path"),
-          fs()->Move(data.ObjectPath(), "missing-container/path"));
       GTEST_SKIP() << "The rest of TestMovePath is not implemented for non-HNS scenarios";
     }
-    auto adlfs_client =
-        datalake_service_client_->GetFileSystemClient(data.container_name);
-    // ...and dest.container doesn't exist.
-    EXPECT_RAISES_WITH_MESSAGE_THAT(
-        IOError, HasMissingParentDirMessage("missing-container/path"),
-        fs()->Move(data.ObjectPath(), "missing-container/path"));
-    AssertFileInfo(fs(), data.ObjectPath(), FileType::File);
 
     EXPECT_RAISES_WITH_MESSAGE_THAT(
         IOError, HasMissingParentDirMessage(data.Path("missing-subdir/file")),
@@ -1235,6 +1283,8 @@ class TestAzureFileSystem : public ::testing::Test {
     // "file0" exists
 
     // src is a file and dest exists (as a file)
+    auto adlfs_client =
+        datalake_service_client_->GetFileSystemClient(data.container_name);
     CreateFile(adlfs_client, PreexistingData::kObjectName, PreexistingData::kLoremIpsum);
     CreateFile(adlfs_client, "file1", PreexistingData::kLoremIpsum);
     ASSERT_MOVE_OK(data.ObjectPath(), data.Path("file0"));
@@ -1476,6 +1526,10 @@ TYPED_TEST(TestAzureFileSystemOnAllEnvs, CreateDirWithEmptyPath) {
 
 TYPED_TEST(TestAzureFileSystemOnAllEnvs, CreateDirOnRoot) { this->TestCreateDirOnRoot(); }
 
+TYPED_TEST(TestAzureFileSystemOnAllEnvs, CreateDirOnRootWithTrailingSlash) {
+  this->TestCreateDirOnRootWithTrailingSlash();
+}
+
 // Tests using all the 3 environments (Azurite, Azure w/o HNS (flat), Azure w/ HNS)
 // combined with the two scenarios for AzureFileSystem::cached_hns_support_ -- unknown and
 // known according to the environment.
@@ -1506,6 +1560,11 @@ TYPED_TEST(TestAzureFileSystemOnAllScenarios, CreateDirOnExistingContainer) {
   this->TestCreateDirOnExistingContainer();
 }
 
+TYPED_TEST(TestAzureFileSystemOnAllScenarios,
+           CreateDirOnExistingContainerWithTrailingSlash) {
+  this->TestCreateDirOnExistingContainerWithTrailingSlash();
+}
+
 TYPED_TEST(TestAzureFileSystemOnAllScenarios, CreateDirOnMissingContainer) {
   this->TestCreateDirOnMissingContainer();
 }
@@ -1522,12 +1581,21 @@ TYPED_TEST(TestAzureFileSystemOnAllScenarios, DeleteDirSuccessHaveBlob) {
   this->TestDeleteDirSuccessHaveBlob();
 }
 
+TYPED_TEST(TestAzureFileSystemOnAllScenarios, NonEmptyDirWithTrailingSlash) {
+  this->TestNonEmptyDirWithTrailingSlash();
+}
+
 TYPED_TEST(TestAzureFileSystemOnAllScenarios, DeleteDirSuccessHaveDirectory) {
   this->TestDeleteDirSuccessHaveDirectory();
 }
 
 TYPED_TEST(TestAzureFileSystemOnAllScenarios, DeleteDirContentsSuccessExist) {
   this->TestDeleteDirContentsSuccessExist();
+}
+
+TYPED_TEST(TestAzureFileSystemOnAllScenarios,
+           DeleteDirContentsSuccessExistWithTrailingSlash) {
+  this->TestDeleteDirContentsSuccessExistWithTrailingSlash();
 }
 
 TYPED_TEST(TestAzureFileSystemOnAllScenarios, DeleteDirContentsSuccessNonexistent) {
