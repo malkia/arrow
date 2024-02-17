@@ -5,29 +5,10 @@ build --experimental_convenience_symlinks=clean
 # Enable ":windows" ":linux", etc. auto-config tags
 common --enable_platform_specific_config
 
-# Notes:
-# 
-# 1: MSVC\14.38.33130\include\memory(3784): error C4996: 'std::atomic_load_explicit': 
-#       warning STL4029: std::atomic_*() overloads for shared_ptr are deprecated in C++20.
-#       The shared_ptr specialization of std::atomic provides superior functionality. 
-#       You can define _SILENCE_CXX20_OLD_SHARED_PTR_ATOMIC_SUPPORT_DEPRECATION_WARNING 
-#       or _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS to suppress this warning.
-#
-# 2: Enable c++20 for <ranges> which brings <__msvc_int128> and from there we use 
-#       _Signed128 and _Unsigned128 otherwise we'll have to use boost for that.
-#
-# 3: arrow/util/vector.h(150): error C4996: 'std::move_iterator<std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>>::operator ->': 
-#       warning STL4031: std::move_iterator::operator->() is deprecated in C++20. 
-#       You can define _SILENCE_CXX20_MOVE_ITERATOR_ARROW_DEPRECATION_WARNING or _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS to suppress this warning.
-#        with
-#        [
-#            _Ty=arrow::Result<arrow::MoveOnlyDataType>
-#        ]
-#
-build:windows    --copt="/Brepro"    --copt="/guard:cf" --copt="/Z7" --copt="/JMC-" --cxxopt="/std:c++20" --copt="/sdl" --copt="-D_SILENCE_CXX20_OLD_SHARED_PTR_ATOMIC_SUPPORT_DEPRECATION_WARNING" --copt="-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING" --copt="-D_SILENCE_CXX20_MOVE_ITERATOR_ARROW_DEPRECATION_WARNING" --copt="-utf-8" --copt="-wd4996"
+build:windows    --copt="/Brepro"    --copt="/guard:cf" --copt="/Z7" --copt="/JMC-" --cxxopt="/std:c++17" --copt="/sdl" --copt="-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING" --copt="-utf-8" --copt="-wd4996"
 build:windows --linkopt="/Brepro" --linkopt="/guard:cf" --linkopt="/DEBUG:FULL" --linkopt="/CETCOMPAT" --linkopt="/OPT:REF,ICF" --linkopt="/RELEASE"
-common:linux --cxxopt=-std=c++20
-common:macos --cxxopt=-std=c++20
+common:linux --cxxopt=-std=c++17
+common:macos --cxxopt=-std=c++17
 
 # Select the clang-cli, the definion is in the WORKSPACE (x64_windows-clang-cl)
 # common:windows --extra_execution_platforms=//:x64_windows-clang-cl --extra_toolchains=@local_config_cc//:cc-toolchain-x64_windows-clang-cl

@@ -877,17 +877,7 @@ struct GroupedVarStdImpl : public GroupedAggregator {
 
   template <typename T>
   double ToDouble(T value) const {
-#ifdef _MSC_VER
-    if constexpr (std::is_same_v<T, std::_Signed128>)
-    {
-      // TODO(malkia): Find proper conversion of int128_t to double.
-      return 0.0;
-    }
-    else
-#endif
-    {
-      return static_cast<double>(value);
-    }
+    return static_cast<double>(value);
   }
   double ToDouble(const Decimal128& value) const {
     return value.ToDouble(decimal_scale_);

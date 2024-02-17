@@ -21,10 +21,6 @@
 
 #ifndef ARROW_USE_NATIVE_INT128
 #include <boost/multiprecision/cpp_int.hpp>
-#elif defined(_MSC_VER) // TODO: Detect c++20
-#include <ranges>
-using __int128_t = std::_Signed128;
-using __uint128_t = std::_Unsigned128;
 #endif
 
 namespace arrow {
