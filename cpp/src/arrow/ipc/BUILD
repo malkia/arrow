@@ -31,6 +31,7 @@ cc_library(
     include_prefix = "arrow/ipc",
     deps = [
         "//cpp/src/arrow:internal",
+        "//cpp/src/arrow/json",
     ],
 )
 

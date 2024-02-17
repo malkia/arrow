@@ -1,3 +1,4 @@
+common --noexperimental_merged_skyframe_analysis_execution
 common --enable_runfiles                                                                                            # Don't create the "bazel-*" foldersriu
 build --experimental_convenience_symlinks=clean
 

@@ -14,6 +14,7 @@ cc_library(
     include_prefix = "arrow/extension",
     deps = [
         "//cpp/src/arrow:internal",
+        "//cpp/src/arrow/json",
     ],
 )
 
