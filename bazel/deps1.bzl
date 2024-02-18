@@ -1,7 +1,8 @@
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-def _deps1(blah):
+def _deps1(mod_ext):
+    mod_ext.report_progress("google/flatbuffers")
     maybe(
         http_archive,
         name = "com_github_google_flatbuffers",
@@ -9,16 +10,7 @@ def _deps1(blah):
         strip_prefix = "flatbuffers-23.5.26",
         url = "https://github.com/google/flatbuffers/archive/refs/tags/v23.5.26.tar.gz",
     )
-
-    maybe(
-        http_archive,
-        name = "com_github_apache_thrift",
-        build_file = "@arrow//bazel:thrift.BUILD",
-        integrity = "sha256-ZCiRHbUFcCxR99mTFVpKTIr+6D/dAhtS8uzNjTR4Bik=",
-        strip_prefix = "thrift-0.19.0",
-        url = "https://github.com/apache/thrift/archive/refs/tags/v0.19.0.tar.gz",
-    )
-
+    mod_ext.report_progress("nelhage/rules_boost")
     maybe(
         http_archive,
         name = "com_github_nelhage_rules_boost",
@@ -26,7 +18,7 @@ def _deps1(blah):
         strip_prefix = "rules_boost-76ed276e0ea602f83d35687084f5f8751ecd2bcb",
         url = "https://github.com/nelhage/rules_boost/archive/76ed276e0ea602f83d35687084f5f8751ecd2bcb.tar.gz",
     )
-
+    mod_ext.report_progress("xtensor-stack/simd")
     maybe(
         http_archive,
         name = "com_github_xtensorstack_xsimd",
@@ -35,7 +27,7 @@ def _deps1(blah):
         strip_prefix = "xsimd-12.1.1",
         url = "https://github.com/xtensor-stack/xsimd/archive/refs/tags/12.1.1.tar.gz",
     )
-
+    mod_ext.report_progress("microsoft/wil")
     maybe(
         http_archive,
         name = "com_github_microsoft_wil",
@@ -44,7 +36,7 @@ def _deps1(blah):
         strip_prefix = "wil-1.0.240122.1",
         url = "https://github.com/microsoft/wil/archive/refs/tags/v1.0.240122.1.tar.gz",
     )
-
+    mod_ext.report_progress("Azure/azure-sdk-for-cpp")
     maybe(
         http_archive,
         name = "com_github_azure_sdk",
@@ -53,8 +45,7 @@ def _deps1(blah):
         strip_prefix = "azure-sdk-for-cpp-azure-core_1.11.1",
         url = "https://github.com/Azure/azure-sdk-for-cpp/archive/refs/tags/azure-core_1.11.1.tar.gz",
     )
-
-    # Note: snappy is placed earlier as tensorflow's snappy does not include snappy-c
+    mod_ext.report_progress("google/snappy")
     maybe(
         http_archive,
         name = "snappy",
