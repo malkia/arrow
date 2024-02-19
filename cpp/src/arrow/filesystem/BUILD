@@ -50,6 +50,7 @@ cc_library(
         "@com_github_azure_sdk//:storage_blobs",
         "@com_github_azure_sdk//:storage_files_datalake",
     ],
+    target_compatible_with = ["@platforms//os:windows"],
 )
 
 cc_library(
@@ -78,14 +79,17 @@ cc_test(
         "@boost//:process",
         "@googletest//:gtest_main",
     ],
+    target_compatible_with = ["@platforms//os:windows"],
 )
 
 cc_library(
     name = "filesystem",
     deps = [
-        "azure",
         "internal",
-    ],
+    ] + select({
+        "@platforms//os:windows": ["azure"],
+        "//conditions:default": [],
+    }),
 )
 
 [cc_test(
