@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "88019ad89ace8cbf791b44b78e26e33466ff7855cd7eb28ff893194745cd0af9",
+  "moduleFileHash": "0e932d210a63a166970635d19da814e42b8277244b26dc070d288aa5f7f56b75",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -109,7 +109,7 @@
         "lz4": "lz4@1.9.4",
         "rapidjson": "rapidjson@1.1.0",
         "zlib": "zlib@1.3.1",
-        "zstd": "zstd@1.5.5",
+        "zstd": "zstd@1.5.5.bcr.1",
         "doctest": "doctest@2.4.11",
         "aspect_rules_js": "aspect_rules_js@1.37.1",
         "bazel_tools": "bazel_tools@_",
@@ -474,10 +474,10 @@
         }
       }
     },
-    "zstd@1.5.5": {
+    "zstd@1.5.5.bcr.1": {
       "name": "zstd",
-      "version": "1.5.5",
-      "key": "zstd@1.5.5",
+      "version": "1.5.5.bcr.1",
+      "key": "zstd@1.5.5.bcr.1",
       "repoName": "zstd",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
@@ -492,15 +492,15 @@
         "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
         "ruleClassName": "http_archive",
         "attributes": {
-          "name": "zstd~1.5.5",
+          "name": "zstd~1.5.5.bcr.1",
           "urls": [
             "https://github.com/facebook/zstd/releases/download/v1.5.5/zstd-1.5.5.tar.gz"
           ],
           "integrity": "sha256-nEOWzIKc+uMZpuJhUgLoKq1BNyBzSC/OKG+seGRtPuQ=",
           "strip_prefix": "zstd-1.5.5",
           "remote_patches": {
-            "https://bcr.bazel.build/modules/zstd/1.5.5/patches/add_build_file.patch": "sha256-RuZ752brpYGsY08f/54bFx5pJIOGwkLVAmyQCfAUxjg=",
-            "https://bcr.bazel.build/modules/zstd/1.5.5/patches/module_dot_bazel.patch": "sha256-Gow157Ff39hKAZfkLrZfdVAmbfwZYYDlfcHUM0B4a7M="
+            "https://bcr.bazel.build/modules/zstd/1.5.5.bcr.1/patches/add_build_file.patch": "sha256-Zm8MvkcOsOdnhFmH7jl1iFKx0RX6LouL5SEP5ddmliU=",
+            "https://bcr.bazel.build/modules/zstd/1.5.5.bcr.1/patches/module_dot_bazel.patch": "sha256-+cgXnYCj1fFgNLlMN4v6g6iJ+AYFabXcuL+nIpmtYHs="
           },
           "remote_patch_strip": 0
         }
@@ -2197,7 +2197,7 @@
   "moduleExtensions": {
     "//bazel:deps1.bzl%deps1": {
       "general": {
-        "bzlTransitiveDigest": "I+juTjwdDXyvjeoMaSIpbG9TJYInQiKQaqtwG59AWv4=",
+        "bzlTransitiveDigest": "UzemusDZFkZYyzCuh9bvXjHjCFhLmgBIwTfrn6e9JQs=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2276,7 +2276,7 @@
     },
     "//bazel:deps2.bzl%deps2": {
       "general": {
-        "bzlTransitiveDigest": "tod1deLkpJ/HfE4QLG4kTtrsKicFaT3oyscThGqHmCk=",
+        "bzlTransitiveDigest": "ElXCF3i0kxBuR2ZhCzpJVekaoEkguW7ulRB3Q3ui6Ek=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2804,8 +2804,8 @@
       "general": {
         "bzlTransitiveDigest": "xRh0gPgCNOI03DajFHLrq8/GL6naYs7/fa1Ib8xo4LA=",
         "accumulatedFileDigests": {
-          "@@aspect_bazel_lib~1.40.0~toolchains~yq_linux_amd64//:yq": "042f7462ec8378f8b0d3bac85d1b1a063b63beef5d8e3826bb2377294116ae90",
-          "@@//:pnpm-lock.yaml": "1bc8523529670e9440e5f70639c1801ccad3490e9f0924127d420ab02b176d25"
+          "@@aspect_bazel_lib~1.40.0~toolchains~yq_windows_amd64//:yq.exe": "7d391921bf5481db063e2b0f043aab0ef2ddaa854ae0e03a4d6d9a1112d18fa8",
+          "@@//:pnpm-lock.yaml": "3416d9bf49e49fde108cffa7f410c3c4f41529962d87c6bfd977c2feadea2a79"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2891,8 +2891,8 @@
           ],
           [
             "aspect_rules_js~1.37.1",
-            "yq_linux_amd64",
-            "aspect_bazel_lib~1.40.0~toolchains~yq_linux_amd64"
+            "yq_windows_amd64",
+            "aspect_bazel_lib~1.40.0~toolchains~yq_windows_amd64"
           ]
         ]
       }
@@ -2925,25 +2925,6 @@
             "bazel_tools"
           ]
         ]
-      }
-    },
-    "@@bazel_tools//tools/osx:xcode_configure.bzl%xcode_configure_extension": {
-      "general": {
-        "bzlTransitiveDigest": "Qh2bWTU6QW6wkrd87qrU4YeY+SG37Nvw3A0PR4Y0L2Y=",
-        "accumulatedFileDigests": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "local_config_xcode": {
-            "bzlFile": "@@bazel_tools//tools/osx:xcode_configure.bzl",
-            "ruleClassName": "xcode_autoconf",
-            "attributes": {
-              "name": "bazel_tools~xcode_configure_extension~local_config_xcode",
-              "xcode_locator": "@bazel_tools//tools/osx:xcode_locator.m",
-              "remote_xcode": ""
-            }
-          }
-        },
-        "recordedRepoMappingEntries": []
       }
     },
     "@@bazel_tools//tools/sh:sh_configure.bzl%sh_configure_extension": {

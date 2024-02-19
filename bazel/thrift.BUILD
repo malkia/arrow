@@ -58,6 +58,9 @@ SRCS = [
     "lib/cpp/src/thrift/transport/TTransportUtils.cpp",
     #"lib/cpp/src/thrift/transport/TWebSocketServer.cpp",
     "lib/cpp/src/thrift/transport/TZlibTransport.cpp",
+]
+
+WIN_SRCS = [
     "lib/cpp/src/thrift/windows/GetTimeOfDay.cpp",
     "lib/cpp/src/thrift/windows/OverlappedSubmissionThread.cpp",
     "lib/cpp/src/thrift/windows/SocketPair.cpp",
@@ -156,6 +159,9 @@ HDRS = [
     "lib/cpp/src/thrift/transport/TVirtualTransport.h",
     "lib/cpp/src/thrift/transport/TWebSocketServer.h",
     "lib/cpp/src/thrift/transport/TZlibTransport.h",
+]
+
+WIN_HDRS = [
     "lib/cpp/src/thrift/windows/config.h",
     "lib/cpp/src/thrift/windows/GetTimeOfDay.h",
     "lib/cpp/src/thrift/windows/Operators.h",
@@ -169,22 +175,64 @@ HDRS = [
 write_file(
     name = "write_config_h",
     out = "lib/cpp/src/thrift/config.h",
-    content = [
-        "#pragma once",
-        "#define PACKAGE_VERSION \"0.21.0\"",
-        "#define PACKAGE_STRING \" 0.21.0\"",
-        "#define HAVE_FCNTL_H 1",
-        "#define HAVE_STDINT_H 1",
-    ],
+    content = 
+        [
+            "#pragma once",
+            "#define PACKAGE_VERSION \"0.21.0\"",
+            "#define PACKAGE_STRING \" 0.21.0\"",
+            "#define ARITHMETIC_RIGHT_SHIFT 1",
+            "#define SIGNED_RIGHT_SHIFT_IS 1",
+            "#define HAVE_FCNTL_H 1",
+            "#define HAVE_STDINT_H 1",
+            "#define HAVE_INTTYPES_H 1",
+        ] 
+    + select({
+        "@platforms//os:windows":
+            [
+                "#define HAVE_AF_UNIX_H 1",
+            ],
+        "//conditions:default":
+        [
+            "#define HAVE_ARPA_INET_H 1",
+            "#define HAVE_NETDB_H 1",
+            "#define HAVE_NETINET_IN_H 1",
+            "#define HAVE_SIGNAL_H 1",
+            "#define HAVE_UNISTD_H 1",
+            "#define HAVE_SYS_IOCTL_H 1",
+            "#define HAVE_SYS_PARAM_H 1",
+            "#define HAVE_SYS_RESOURCE_H 1",
+            "#define HAVE_SYS_SOCKET_H 1",
+            "#define HAVE_SYS_STAT_H 1",
+            "#define HAVE_SYS_UN_H 1",
+            "#define HAVE_POLL_H 1",
+            "#define HAVE_SYS_POLL_H 1",
+            "#define HAVE_SYS_SELECT_H 1",
+            "#define HAVE_SYS_TIME_H 1",
+            "#define HAVE_SCHED_H 1",
+            "#define HAVE_SCHED_GET_PRIORITY_MAX 1",
+            "#define HAVE_SCHED_GET_PRIORITY_MIN 1",
+            "#define HAVE_STRINGS_H 1",
+            "#define HAVE_STRERROR_R 1",
+            "#define STRERROR_R_CHAR_P 1",
+            "#define HAVE_GETHOSTBYNAME_R 1",
+        ]
+    })
 )
 
 cc_library(
     name = "thrift",
-    srcs = SRCS,
-    hdrs = HDRS,
-    # for std::bad_cast
-    copts = ["-FItypeinfo"],
-    defines = ["HAVE_AF_UNIX_H=1"],
+    srcs = SRCS + select({
+        "@platforms//os:windows": WIN_SRCS,
+        "//conditions:default": []
+    }),
+    hdrs = HDRS + select({
+        "@platforms//os:windows": WIN_HDRS,
+        "//conditions:default": []
+    }),
+    copts = select({
+        "@platforms//os:windows": ["-FItypeinfo"],
+        "//conditions:default": [],
+    }),
     strip_include_prefix = "lib/cpp/src",
     deps = [
         "@boost//:locale",
