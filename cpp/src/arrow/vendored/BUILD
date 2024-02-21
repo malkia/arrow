@@ -6,7 +6,7 @@ cc_library(
     name = "base64",
     srcs = ["base64.cpp"],
     deps = [
-        "//cpp/src/arrow:base64",
+        "//cpp/src/arrow:util_base64",
     ],
 )
 
@@ -23,6 +23,7 @@ cc_library(
     name = "pcq",
     hdrs = ["ProducerConsumerQueue.h"],
     include_prefix = "arrow/vendored",
+    visibility = ["//cpp/src/arrow:__pkg__"],
 )
 
 cc_library(
@@ -31,7 +32,7 @@ cc_library(
     hdrs = ["strptime.h"],
     include_prefix = "arrow/vendored",
     deps = [
-        "//cpp/src/arrow:visibility",
+        "//cpp/src/arrow:util_config",
     ],
 )
 

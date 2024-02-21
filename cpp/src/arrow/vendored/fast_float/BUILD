@@ -1,7 +1,3 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
-
 cc_library(
     name = "fast_float",
     includes = ["."],
@@ -18,7 +14,5 @@ cc_library(
         "parse_number.h",
         "simple_decimal_conversion.h",
     ],
-    deps = [
-        "//cpp/src/arrow:config",
-    ]
+    visibility = ["//cpp/src/arrow:__pkg__"],
 )

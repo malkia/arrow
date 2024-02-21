@@ -19,6 +19,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <cassert>
 
 #include "arrow/util/bit_util.h"
 #include "arrow/util/endian.h"

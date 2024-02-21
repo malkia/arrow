@@ -35,66 +35,9 @@ package(
 
 # Not complete rough patch from CMakeLists.txt
 
-CMAKE_CXX_COMPILER_ID = "todo_cmake_cxx_compiler_id"
-
-CMAKE_CXX_COMPILER_VERSION = "todo_cmake_cxx_compiler_version"
-
-CMAKE_CXX_FLAGS = "todo_cmake_cxx_flags"
-
-UPPERCASE_BUILD_TYPE = "DEBUG"  # "RELEASE" ?
-
-# windows_resources(
-#     name = "longpaths",
-#     rc_files = ["util/io_util_test.rc"],
-# )
-
-expand_template(
-    name = "util_config_h",
-    out = "util/config.h",
-    substitutions = {
-        "@ARROW_VERSION_MAJOR@": "%d" % ARROW_VERSION_MAJOR,
-        "@ARROW_VERSION_MINOR@": "%d" % ARROW_VERSION_MINOR,
-        "@ARROW_VERSION_PATCH@": "%d" % ARROW_VERSION_PATCH,
-        "@ARROW_VERSION@": ARROW_VERSION,
-        "@ARROW_SO_VERSION@": ARROW_SO_VERSION,
-        "@ARROW_FULL_SO_VERSION@": ARROW_FULL_SO_VERSION,
-        "@ARROW_GIT_DESCRIPTION@": "todo-git-description",
-        "@ARROW_GIT_ID@": "todo-git-id",
-        "@ARROW_PACKAGE_KIND@": ARROW_PACKAGE_KIND,
-        "@CMAKE_CXX_COMPILER_ID@": CMAKE_CXX_COMPILER_ID,
-        "@CMAKE_CXX_COMPILER_VERSION@": CMAKE_CXX_COMPILER_VERSION,
-        "@CMAKE_CXX_FLAGS@": CMAKE_CXX_FLAGS,
-        "@UPPERCASE_BUILD_TYPE@": UPPERCASE_BUILD_TYPE,
-        # Example how to find uses in the code
-        # git grep -E ".*#.*/bARROW_CSV/b"
-        "#cmakedefine ARROW_COMPUTE": "#define ARROW_COMPUTE",
-        "#cmakedefine ARROW_CSV": "#define ARROW_CSV",
-        "#cmakedefine ARROW_CUDA": "",
-        "#cmakedefine ARROW_DATASET": "#define ARROW_DATASET",
-        "#cmakedefine ARROW_FILESYSTEM": "#define ARROW_FILESYSTEM",
-        "#cmakedefine ARROW_FLIGHT_SQL": "",
-        "#cmakedefine ARROW_FLIGHT": "",
-        "#cmakedefine ARROW_IPC": "#define ARROW_IPC",
-        "#cmakedefine ARROW_JEMALLOC_VENDORED": "", 
-        "#cmakedefine ARROW_JEMALLOC": "", 
-        "#cmakedefine ARROW_JSON": "#define ARROW_JSON",
-        "#cmakedefine ARROW_ORC": "",
-        "#cmakedefine ARROW_PARQUET": "#define ARROW_PARQUET",
-        "#cmakedefine ARROW_SUBSTRAIT": "",
-        "#cmakedefine ARROW_ENABLE_THREADING": "#define ARROW_ENABLE_THREADING",
-        "#cmakedefine ARROW_GCS": "",
-        "#cmakedefine ARROW_S3": "",
-        "#cmakedefine ARROW_USE_NATIVE_INT128": "", #
-        "#cmakedefine ARROW_WITH_MUSL": "",
-        "#cmakedefine ARROW_WITH_OPENTELEMETRY": "",
-        "#cmakedefine ARROW_WITH_UCX": "",
-        "#cmakedefine PARQUET_REQUIRE_ENCRYPTION": "#define PARQUET_REQUIRE_ENCRYPTION",
-    },
-    template = "util/config.h.cmake",
-)
-
 # From CMakeLists.txt
 ARROW_SRCS = [
+    "util/cpu_info.cc",
     "array/array_base.cc",
     "array/array_binary.cc",
     "array/array_decimal.cc",
@@ -198,9 +141,7 @@ ARROW_SRCS = [
     "memory_pool.cc",
     "pretty_print.cc",
     "record_batch.cc",
-    "result.cc",
     "scalar.cc",
-    "status.cc",
     "table_builder.cc",
     "table.cc",
     "tensor.cc",
@@ -212,7 +153,6 @@ ARROW_SRCS = [
     "util/basic_decimal.cc",
     "util/bit_block_counter.cc",
     "util/bit_run_reader.cc",
-    "util/bit_util.cc",
     "util/bitmap_builders.cc",
     "util/bitmap_ops.cc",
     "util/bitmap.cc",
@@ -221,13 +161,9 @@ ARROW_SRCS = [
     "util/cancel.cc",
     "util/compression.cc",
     "util/counting_semaphore.cc",
-    "util/cpu_info.cc",
-    "util/crc32.cc",
-    "util/debug.cc",
     "util/decimal.cc",
     "util/delimiting.cc",
     "util/dict_util.cc",
-    "util/float16.cc",
     "util/formatting.cc",
     "util/future.cc",
     "util/hashing.cc",
@@ -235,11 +171,8 @@ ARROW_SRCS = [
     "util/io_util.cc",
     "util/key_value_metadata.cc",
     "util/list_util.cc",
-    "util/logging.cc",
     "util/memory.cc",
-    "util/mutex.cc",
     "util/ree_util.cc",
-    "util/string_builder.cc",
     "util/string.cc",
     "util/task_group.cc",
     "util/tdigest.cc",
@@ -248,7 +181,6 @@ ARROW_SRCS = [
     "util/tracing.cc",
     "util/trie.cc",
     "util/union_util.cc",
-    "util/unreachable.cc",
     "util/uri.cc",
     "util/utf8.cc",
     "util/value_parsing.cc",
@@ -265,6 +197,7 @@ ARROW_SRCS = [
 ]
 
 ARROW_HDRS = [
+    "util/cpu_info.h",
     "util/spaced.h",
     "api.h",
     "io/api.h",
@@ -273,9 +206,7 @@ ARROW_HDRS = [
     "util/bitmap_visit.h",
     "util/rows_to_batches.h",
     "util/bit_stream_utils.h",
-    "util/byte_stream_split_internal.h",
     "util/cache_internal.h",
-    "util/regex.h",
     "array.h",
     "array/array_base.h",
     "array/array_binary.h",
@@ -373,23 +304,17 @@ ARROW_HDRS = [
     "memory_pool.h",
     "pretty_print.h",
     "record_batch.h",
-    "result_internal.h",
-    "result.h",
     "scalar.h",
-    "status.h",
     "stl_allocator.h",
     "stl_iterator.h",
     "table_builder.h",
     "table.h",
     "tensor.h",
-    "type_fwd.h",
     "type_traits.h",
     "type.h",
     "sparse_tensor.h",
-    "util/concurrent_map.h",
     "util/algorithm.h",
     "util/align_util.h",
-    "util/aligned_storage.h",
     "util/async_generator_fwd.h",
     "util/async_generator.h",
     "util/async_util.h",
@@ -398,68 +323,40 @@ ARROW_HDRS = [
     "util/binary_view_util.h",
     "util/bit_block_counter.h",
     "util/bit_run_reader.h",
-    "util/bit_util.h",
     "util/bitmap_builders.h",
     "util/bitmap_generate.h",
     "util/bitmap_ops.h",
     "util/bitmap_reader.h",
-    "util/bitmap_writer.h",
     "util/map.h",
     "util/bitmap.h",
     "util/bitset_stack.h",
-    "util/bpacking_default.h",
     "util/bpacking.h",
-    "util/bpacking64_default.h",
     "util/byte_size.h",
     "util/cancel.h",
-    "util/checked_cast.h",
-    "util/compare.h",
     "util/compression_internal.h",
     "util/compression.h",
-    "util/config.h",
     "util/counting_semaphore.h",
-    "util/cpu_info.h",
-    "util/crc32.h",
-    "util/debug.h",
     "util/decimal_internal.h",
     "util/decimal.h",
     "util/delimiting.h",
     "util/dict_util.h",
     "util/dispatch.h",
-    "util/double_conversion.h",
-    "util/endian.h",
-    "util/float16.h",
     "util/formatting.h",
     "util/functional.h",
     "util/future.h",
-    "util/hash_util.h",
     "util/hashing.h",
     "util/int_util_overflow.h",
     "util/int_util.h",
-    "util/int128_internal.h",
     "util/io_util.h",
     "util/iterator.h",
     "util/key_value_metadata.h",
-    "util/launder.h",
     "util/list_util.h",
-    "util/logging.h",
-    "util/macros.h",
-    "util/math_constants.h",
     "util/memory.h",
-    "util/mutex.h",
     "util/parallel.h",
-    "util/pcg_random.h",
     "util/print.h",
-    "util/queue.h",
-    "util/range.h",
     "util/ree_util.h",
     "util/reflection_internal.h",
-    "util/simd.h",
     "util/slice_util_internal.h",
-    "util/small_vector.h",
-    "util/sort.h",
-    "util/span.h",
-    "util/string_builder.h",
     "util/string.h",
     "util/task_group.h",
     "util/tdigest.h",
@@ -468,11 +365,7 @@ ARROW_HDRS = [
     "util/tracing_internal.h",
     "util/tracing.h",
     "util/trie.h",
-    "util/type_fwd.h",
-    "util/type_traits.h",
-    "util/ubsan.h",
     "util/union_util.h",
-    "util/unreachable.h",
     "util/uri.h",
     "util/utf8_internal.h",
     "util/utf8.h",
@@ -488,66 +381,198 @@ ARROW_HDRS = [
     #io/hdfs.h
 ]
 
+CMAKE_CXX_COMPILER_ID = "todo_cmake_cxx_compiler_id"
+CMAKE_CXX_COMPILER_VERSION = "todo_cmake_cxx_compiler_version"
+CMAKE_CXX_FLAGS = "todo_cmake_cxx_flags"
+UPPERCASE_BUILD_TYPE = "DEBUG"  # "RELEASE" ?
+
+expand_template(
+    name = "util_config_h",
+    out = "util/config.h",
+    substitutions = {
+        "@ARROW_VERSION_MAJOR@": "%d" % ARROW_VERSION_MAJOR,
+        "@ARROW_VERSION_MINOR@": "%d" % ARROW_VERSION_MINOR,
+        "@ARROW_VERSION_PATCH@": "%d" % ARROW_VERSION_PATCH,
+        "@ARROW_VERSION@": ARROW_VERSION,
+        "@ARROW_SO_VERSION@": ARROW_SO_VERSION,
+        "@ARROW_FULL_SO_VERSION@": ARROW_FULL_SO_VERSION,
+        "@ARROW_GIT_DESCRIPTION@": "todo-git-description",
+        "@ARROW_GIT_ID@": "todo-git-id",
+        "@ARROW_PACKAGE_KIND@": ARROW_PACKAGE_KIND,
+        "@CMAKE_CXX_COMPILER_ID@": CMAKE_CXX_COMPILER_ID,
+        "@CMAKE_CXX_COMPILER_VERSION@": CMAKE_CXX_COMPILER_VERSION,
+        "@CMAKE_CXX_FLAGS@": CMAKE_CXX_FLAGS,
+        "@UPPERCASE_BUILD_TYPE@": UPPERCASE_BUILD_TYPE,
+        # Example how to find uses in the code
+        # git grep -E ".*#.*/bARROW_CSV/b"
+        "#cmakedefine ARROW_COMPUTE": "#define ARROW_COMPUTE",
+        "#cmakedefine ARROW_CSV": "#define ARROW_CSV",
+        "#cmakedefine ARROW_CUDA": "",
+        "#cmakedefine ARROW_DATASET": "#define ARROW_DATASET",
+        "#cmakedefine ARROW_FILESYSTEM": "#define ARROW_FILESYSTEM",
+        "#cmakedefine ARROW_FLIGHT_SQL": "",
+        "#cmakedefine ARROW_FLIGHT": "",
+        "#cmakedefine ARROW_IPC": "#define ARROW_IPC",
+        "#cmakedefine ARROW_JEMALLOC_VENDORED": "", 
+        "#cmakedefine ARROW_JEMALLOC": "", 
+        "#cmakedefine ARROW_JSON": "#define ARROW_JSON",
+        "#cmakedefine ARROW_ORC": "",
+        "#cmakedefine ARROW_PARQUET": "#define ARROW_PARQUET",
+        "#cmakedefine ARROW_SUBSTRAIT": "",
+        "#cmakedefine ARROW_ENABLE_THREADING": "#define ARROW_ENABLE_THREADING",
+        "#cmakedefine ARROW_GCS": "",
+        "#cmakedefine ARROW_S3": "",
+        "#cmakedefine ARROW_USE_NATIVE_INT128": "", #
+        "#cmakedefine ARROW_WITH_MUSL": "",
+        "#cmakedefine ARROW_WITH_OPENTELEMETRY": "",
+        "#cmakedefine ARROW_WITH_UCX": "",
+        "#cmakedefine PARQUET_REQUIRE_ENCRYPTION": "#define PARQUET_REQUIRE_ENCRYPTION",
+    },
+    template = "util/config.h.cmake",
+)
+
 cc_library(
-    name = "config",
+    name = "util_config",
+    srcs = [
+        "util/util_config.cc",
+    ],
+    hdrs = [
+        "util/config.h",
+        "util/visibility.h",
+    ],
+    include_prefix = "arrow",
     defines = [
         "ARROW_STATIC=1",
-        # TODO: Move these to some config.h
-        "ARROW_WITH_LZ4",
-        "ARROW_WITH_BZ2",
-        "ARROW_WITH_ZSTD",
-        "ARROW_WITH_ZLIB",
     ],
-    # deps = select({
-    #     "@platforms//os:windows": ["longpaths"],
-    #     "//conditions:default": [],
-    # }),
 )
 
 cc_library(
-    name = "visibility",
-    hdrs = ["util/visibility.h"],
-    include_prefix = "arrow",
-    deps = ["config"],
-)
-
-cc_library(
-    name = "base64",
+    name = "util_base64",
     hdrs = ["util/base64.h"],
     include_prefix = "arrow",
-    deps = ["visibility"],
+    deps = ["util_config"],
+)
+
+# Base utilities in the arrow/util folder
+cc_library(
+    name = "util_base",
+    include_prefix = "arrow",
+    local_defines = [
+        #"ARROW_USE_GLOG",
+        #"ARROW_WITH_BACKTRACE", 
+    ],
+    srcs = [
+        "util/bit_util.cc",        
+        "util/crc32.cc",
+        "util/debug.cc",
+        "util/float16.cc",
+        "util/logging.cc",
+        "util/mutex.cc",
+        "util/string_builder.cc",
+        "util/unreachable.cc",
+        "util/util_base.cc",
+    ],
+    hdrs = [
+        "util/aligned_storage.h",
+        "util/bit_util.h",
+        "util/bitmap_writer.h",
+        "util/bpacking_default.h",
+        "util/bpacking64_default.h",
+        "util/byte_stream_split_internal.h",
+        "util/checked_cast.h",
+        "util/compare.h",
+        "util/concurrent_map.h",
+        "util/crc32.h",
+        "util/debug.h",
+        "util/double_conversion.h", # vendored/double-conversion
+        "util/endian.h",
+        "util/float16.h",
+        "util/hash_util.h",
+        "util/int128_internal.h", # @boost//:multiprecision
+        "util/launder.h",
+        "util/logging.h",
+        "util/macros.h",
+        "util/math_constants.h",
+        "util/mutex.h",
+        "util/pcg_random.h", # vendored/pcg
+        "util/queue.h", # vendored:pcq
+        "util/range.h",
+        "util/regex.h",
+        "util/simd.h",
+        "util/small_vector.h",
+        "util/sort.h",
+        "util/span.h",
+        "util/stopwatch.h",
+        "util/string_builder.h",
+        "util/type_fwd.h", # NOTE: Forwards to classes not in this library!
+        "util/type_traits.h",
+        "util/ubsan.h",
+        "util/unreachable.h",
+        "util/windows_compatibility.h",
+        "util/windows_fixup.h",
+    ],
+    deps = [
+        "util_config",
+        "util_base64",
+        "@boost//:multiprecision", # int128_internal.h
+        "//cpp/src/arrow/vendored:pcq", # queue.h
+        "//cpp/src/arrow/vendored/double-conversion", # double_conversion.h
+        "//cpp/src/arrow/vendored/pcg", # pcg_random.h
+        "//cpp/src/arrow/vendored/portable-snippets", # debug.cc, but others in "base"
+    ],
+    implementation_deps = [
+       "//cpp/src/arrow/vendored:base64",
+    ],
+)
+
+cc_test(
+    name = "util_bit_util_test",
+    srcs = ["util/bit_util_test.cc"],
+    deps = [
+        "//cpp/src/arrow/testing",
+        "@googletest//:gtest_main",
+    ]
 )
 
 cc_library(
-    name = "windows",
+    name = "base",
     hdrs = [
-        "util/windows_compatibility.h",
-        "util/windows_fixup.h",
+        "result.h",
+        "result_internal.h",
+        "status.h",
+        "type_fwd.h",
+    ],
+    srcs = [
+        "base.cc",
+        "status.cc",
+        "result.cc",
+    ],
+    deps = [
+        "util_base",
     ],
     include_prefix = "arrow",
 )
 
 cc_library(
     name = "internal",
+    defines = [
+        "ARROW_WITH_LZ4",
+        "ARROW_WITH_BZ2",
+        "ARROW_WITH_ZSTD",
+        "ARROW_WITH_ZLIB",
+    ],
     srcs = ARROW_SRCS,
     hdrs = ARROW_HDRS,
     include_prefix = "arrow",
     deps = [
-        "visibility",
-        "windows",
-        "//cpp/src/arrow/vendored:base64",
+        "base",
         "//cpp/src/arrow/vendored:datetime",
-        "//cpp/src/arrow/vendored:pcq",
         "//cpp/src/arrow/vendored:strptime",
         "//cpp/src/arrow/vendored:xxhash",
-        "//cpp/src/arrow/vendored/double-conversion",
         "//cpp/src/arrow/vendored/fast_float",
-        "//cpp/src/arrow/vendored/pcg",
-        "//cpp/src/arrow/vendored/portable-snippets",
         "//cpp/src/arrow/vendored/uriparser",
         "//cpp/src/arrow/vendored/utfcpp",
         "//cpp/src/generated:arrow_flatbuffers",
-        "@boost//:multiprecision",
     ],
 )
 
@@ -595,7 +620,7 @@ write_file(
     name = "compression_zstd_inc",
     out = "compression_zstd_inc/zstd.h",
     content = [
-        "#include <lib/zstd.h>",
+        "#include \"lib/zstd.h\"",
     ],
 )
 
@@ -713,7 +738,6 @@ cc_library(
     "util/async_util_test",
     "util/atfork_test",
     "util/bit_block_counter_test",
-    "util/bit_util_test",
     "util/byte_size_test",
     "util/byte_stream_split_test",
     "util/cache_test",

@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "0e932d210a63a166970635d19da814e42b8277244b26dc070d288aa5f7f56b75",
+  "moduleFileHash": "583a69f540cafebc54a9803f208b9803851a07912ce1347893e98f46e3bccc38",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -2197,7 +2197,7 @@
   "moduleExtensions": {
     "//bazel:deps1.bzl%deps1": {
       "general": {
-        "bzlTransitiveDigest": "UzemusDZFkZYyzCuh9bvXjHjCFhLmgBIwTfrn6e9JQs=",
+        "bzlTransitiveDigest": "I+juTjwdDXyvjeoMaSIpbG9TJYInQiKQaqtwG59AWv4=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2276,7 +2276,7 @@
     },
     "//bazel:deps2.bzl%deps2": {
       "general": {
-        "bzlTransitiveDigest": "ElXCF3i0kxBuR2ZhCzpJVekaoEkguW7ulRB3Q3ui6Ek=",
+        "bzlTransitiveDigest": "tod1deLkpJ/HfE4QLG4kTtrsKicFaT3oyscThGqHmCk=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2804,8 +2804,8 @@
       "general": {
         "bzlTransitiveDigest": "xRh0gPgCNOI03DajFHLrq8/GL6naYs7/fa1Ib8xo4LA=",
         "accumulatedFileDigests": {
-          "@@aspect_bazel_lib~1.40.0~toolchains~yq_windows_amd64//:yq.exe": "7d391921bf5481db063e2b0f043aab0ef2ddaa854ae0e03a4d6d9a1112d18fa8",
-          "@@//:pnpm-lock.yaml": "3416d9bf49e49fde108cffa7f410c3c4f41529962d87c6bfd977c2feadea2a79"
+          "@@aspect_bazel_lib~1.40.0~toolchains~yq_linux_amd64//:yq": "042f7462ec8378f8b0d3bac85d1b1a063b63beef5d8e3826bb2377294116ae90",
+          "@@//:pnpm-lock.yaml": "1bc8523529670e9440e5f70639c1801ccad3490e9f0924127d420ab02b176d25"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2891,8 +2891,8 @@
           ],
           [
             "aspect_rules_js~1.37.1",
-            "yq_windows_amd64",
-            "aspect_bazel_lib~1.40.0~toolchains~yq_windows_amd64"
+            "yq_linux_amd64",
+            "aspect_bazel_lib~1.40.0~toolchains~yq_linux_amd64"
           ]
         ]
       }
@@ -2925,6 +2925,25 @@
             "bazel_tools"
           ]
         ]
+      }
+    },
+    "@@bazel_tools//tools/osx:xcode_configure.bzl%xcode_configure_extension": {
+      "general": {
+        "bzlTransitiveDigest": "Qh2bWTU6QW6wkrd87qrU4YeY+SG37Nvw3A0PR4Y0L2Y=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "local_config_xcode": {
+            "bzlFile": "@@bazel_tools//tools/osx:xcode_configure.bzl",
+            "ruleClassName": "xcode_autoconf",
+            "attributes": {
+              "name": "bazel_tools~xcode_configure_extension~local_config_xcode",
+              "xcode_locator": "@bazel_tools//tools/osx:xcode_locator.m",
+              "remote_xcode": ""
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@bazel_tools//tools/sh:sh_configure.bzl%sh_configure_extension": {

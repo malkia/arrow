@@ -27,7 +27,7 @@
 // Avoid defining max() macro
 #include "arrow/util/windows_compatibility.h"
 
-#include <bzlib.h>
+#include "bzlib.h"
 
 #include "arrow/result.h"
 #include "arrow/status.h"

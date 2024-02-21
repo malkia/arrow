@@ -1,7 +1,3 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
-
 cc_library(
     name = "xxhash",
     includes = ["."],
@@ -12,7 +8,5 @@ cc_library(
     srcs = [
         "xxhash.c"
     ],
-    deps = [
-        "//cpp/src/arrow:config",
-    ]
+    visibility = ["//cpp/src/arrow:__subpackages__"],
 )

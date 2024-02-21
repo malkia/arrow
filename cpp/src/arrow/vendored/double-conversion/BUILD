@@ -1,11 +1,5 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
-
 cc_library(
     name = "double-conversion",
-    includes = ["."],
-    include_prefix = "arrow/vendored/double-conversion",
     hdrs = [
         "bignum-dtoa.h",
         "bignum.h",
@@ -30,7 +24,6 @@ cc_library(
         "string-to-double.cc",
         "strtod.cc",
     ],
-    deps = [
-        "//cpp/src/arrow:config",
-    ]
+    include_prefix = "arrow/vendored/double-conversion",
+    visibility = ["//cpp/src/arrow:__pkg__"],
 )

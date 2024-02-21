@@ -1,7 +1,3 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
-
 cc_library(
     name = "uriparser",
     defines = ["URI_STATIC_BUILD"],
@@ -38,7 +34,5 @@ cc_library(
         "UriResolve.c",
         "UriShorten.c",
     ],
-    deps = [
-        "//cpp/src/arrow:config",
-    ]
+    visibility = ["//cpp/src/arrow:__pkg__"],
 )

@@ -1,7 +1,3 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
-
 cc_library(
     name = "utfcpp",
     includes = ["."],
@@ -11,7 +7,5 @@ cc_library(
         "core.h",
         "cpp11.h",
     ],
-    deps = [
-        "//cpp/src/arrow:config",
-    ]
+    visibility = ["//cpp/src/arrow:__pkg__"],
 )
