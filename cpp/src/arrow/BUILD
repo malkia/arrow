@@ -458,9 +458,14 @@ cc_library(
     name = "util_base",
     include_prefix = "arrow",
     local_defines = [
-        #"ARROW_USE_GLOG",
         #"ARROW_WITH_BACKTRACE", 
-    ],
+    ] + select({
+        "//:with_glog_on": ["ARROW_USE_GLOG"],
+        "//conditions:default": [],
+    }) + select({
+        "//:with_backtrace_on": ["ARROW_WITH_BACKTRACE"],
+        "//conditions:default": [],
+    }),
     srcs = [
         "util/bit_util.cc",        
         "util/crc32.cc",
@@ -522,7 +527,10 @@ cc_library(
     ],
     implementation_deps = [
        "//cpp/src/arrow/vendored:base64",
-    ],
+    ] + select({
+        "//:with_glog_on": ["@glog"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_test(
