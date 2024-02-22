@@ -32,7 +32,7 @@ cc_library(
     ],
     include_prefix = "arrow/filesystem",
     deps = [
-        "//cpp/src/arrow:internal",
+        "//cpp/src/arrow:base",
     ],
 )
 

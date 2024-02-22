@@ -15,7 +15,7 @@ cc_library(
     ],
     include_prefix = "arrow/tensor",
     deps = [
-        "//cpp/src/arrow:internal",
+        "//cpp/src/arrow:base",
     ],
 )
 

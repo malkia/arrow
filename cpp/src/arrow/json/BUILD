@@ -29,7 +29,7 @@ cc_library(
     ],
     include_prefix = "arrow/json",
     deps = [
-        "//cpp/src/arrow:internal",
+        "//cpp/src/arrow:base",
         "@rapidjson",
     ],
 )
